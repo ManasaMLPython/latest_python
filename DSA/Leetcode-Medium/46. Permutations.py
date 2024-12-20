@@ -16,20 +16,33 @@ from typing import List
 #
 # Input: nums = [1]
 # Output: [[1]]
-
 class Solution:
     def permute(self, nums: List[int]) -> List[List[int]]:
         result = []
+
+        # Base case: If only one number remains, return it as the only permutation
         if len(nums) == 1:
-            return [nums[:]]
+            return [nums[:]]  # Use a shallow copy to avoid modifying the original list
+
         for i in range(len(nums)):
+            # Remove the first element and store it in `n`
             n = nums.pop(0)
+
+            # Recursively find permutations for the remaining numbers
             perms = self.permute(nums)
+
+            # append the removed element `n` back to each permutation
             for perm in perms:
                 perm.append(n)
+
+            # Restore the removed element `n` back to `nums`
             nums.append(n)
+
+            # Extend the result list with all newly formed permutations
             result.extend(perms)
+
         return result
 
+
 s = Solution()
-print(s.permute([1,2,3]))
+print(s.permute([1, 2, 3]))
