@@ -1,25 +1,26 @@
+from logging import lastResort
 from typing import List
 
 
+
 class Solution:
-    def removeElement(self, nums: List[int], val: int) -> int:
-        # Initialize two pointers: p1 to track valid elements and p2 to iterate through the array
-        p1 = 0
-        p2 = 0
-        while p2 < len(nums):
-            if nums[p2] != val:
-                # Swap the element at p1 and p2 to move valid elements to the front
-                t = nums[p1]
-                nums[p1] = nums[p2]
-                nums[p2] = t
-
-                # Increment p1 to indicate the next position for a valid element
-                p1 += 1
-
-            p2 += 1
-
-        return p1
-
-
+    def rotate(self, nums: List[int], k: int) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        t = nums[k:len(nums)-k]
+        nums = nums[:k]+nums[len(nums)-k:]
+        print(nums)
+        first=0
+        last = len(nums)//2
+        print(nums[first],nums[last])
+        while last<len(nums):
+            temp = nums[first]
+            nums[first]=nums[last]
+            nums[last]=temp
+            first+=1
+            last+=1
+        nums+=t
+        print(nums)
 s = Solution()
-print(s.removeElement([3,2,2,3],3))
+s.rotate(nums = [1,2,3,4,5,6,7], k = 3)
