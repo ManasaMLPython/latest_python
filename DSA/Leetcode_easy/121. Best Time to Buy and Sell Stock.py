@@ -20,15 +20,23 @@ from typing import List
 
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        max_profit=0
-        for i in range(len(prices)):
-            for j in range(i+1,len(prices)):
-                if prices[j]-prices[i]>max_profit:
-                    max_profit = prices[j]-prices[i]
+        # Initialize the minimum price to the first day's price
+        min_profit = prices[0]
+
+        # Initialize the maximum profit as zero
+        max_profit = 0
+
+        for price in prices:
+            # Update the minimum price if a lower price is found
+            if price < min_profit:
+                min_profit = price
+
+            # Calculate the potential profit and update the max profit if higher
+            if price - min_profit > max_profit:
+                max_profit = price - min_profit
+
         return max_profit
 
 
-
-
 s = Solution()
-print(s.maxProfit(prices = [2,4,1]))
+print(s.maxProfit(prices = [7,1,5,3,6,4]))
