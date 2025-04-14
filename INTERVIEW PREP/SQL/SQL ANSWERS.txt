@@ -1,0 +1,4044 @@
+Here are short, two-line answers for the SQL interview questions:
+
+Basic SQL Questions
+What is SQL?
+SQL (Structured Query Language) is used to interact with relational databases. It allows data retrieval, insertion, updating, and deletion.
+
+What are the different types of SQL commands?
+
+DDL (CREATE, ALTER, DROP) – Defines schema.
+
+DML (INSERT, UPDATE, DELETE) – Manipulates data.
+
+DCL (GRANT, REVOKE) – Controls access.
+
+TCL (COMMIT, ROLLBACK) – Manages transactions.
+
+What is the difference between WHERE and HAVING?
+
+WHERE filters rows before aggregation.
+
+HAVING filters after aggregation (used with GROUP BY).
+
+What are primary key and foreign key?
+
+Primary Key: Unique identifier for a record in a table.
+
+Foreign Key: Links to the primary key in another table.
+
+What is the difference between INNER JOIN, LEFT JOIN, RIGHT JOIN, and FULL OUTER JOIN?
+
+INNER JOIN: Returns matching rows from both tables.
+
+LEFT JOIN: Returns all left table rows + matching right table rows.
+
+RIGHT JOIN: Returns all right table rows + matching left table rows.
+
+FULL JOIN: Returns all rows from both tables.
+
+What is the difference between UNION and UNION ALL?
+
+UNION removes duplicates.
+
+UNION ALL keeps all rows, including duplicates.
+
+What are the different types of indexes?
+
+Clustered Index: Sorts and stores rows physically in order.
+
+Non-Clustered Index: Creates a separate structure for faster lookups.
+
+What is the difference between COUNT(*), COUNT(column), and COUNT(DISTINCT column)?
+
+COUNT(*) counts all rows.
+
+COUNT(column) counts non-null values.
+
+COUNT(DISTINCT column) counts unique non-null values.
+
+Intermediate SQL Questions
+How do you find duplicate records in a table?
+
+
+SELECT column, COUNT(*) FROM table GROUP BY column HAVING COUNT(*) > 1;
+This finds values that appear more than once.
+
+How do you remove duplicate records from a table?
+
+DELETE FROM table WHERE id NOT IN (SELECT MIN(id) FROM table GROUP BY column);
+Keeps the first occurrence and deletes duplicates.
+
+How do you retrieve the second-highest salary from a table?
+
+SELECT MAX(Salary) FROM Employees WHERE Salary < (SELECT MAX(Salary) FROM Employees);
+Finds the highest salary excluding the topmost value.
+
+What is the difference between RANK(), DENSE_RANK(), and ROW_NUMBER()?
+
+RANK(): Skips rankings when duplicates exist.
+
+DENSE_RANK(): Doesn’t skip rankings.
+
+ROW_NUMBER(): Provides a unique row number.
+
+How does GROUP BY work, and how does it differ from DISTINCT?
+
+GROUP BY groups rows and allows aggregations.
+
+DISTINCT removes duplicate rows but does not allow aggregations.
+
+How do you calculate a running total in SQL?
+
+SELECT column, SUM(column) OVER (ORDER BY column) FROM table;
+Uses window functions to compute cumulative sums.
+
+How can you pivot a table in SQL?
+
+Use CASE WHEN or the PIVOT function (in SQL Server) to transform rows into columns.
+
+What is a CTE (Common Table Expression), and how is it different from a subquery?
+
+CTE: Temporary named result set for better readability.
+
+Subquery: Nested query inside another query.
+
+Advanced SQL Questions
+How do you write a recursive CTE?
+
+WITH RecursiveCTE AS (
+    SELECT id, parent_id FROM table WHERE parent_id IS NULL  
+    UNION ALL  
+    SELECT t.id, t.parent_id FROM table t INNER JOIN RecursiveCTE r ON t.parent_id = r.id
+) SELECT * FROM RecursiveCTE;
+Used for hierarchical data like org charts.
+
+What is a window function, and how does it work?
+
+Performs calculations across a subset of rows without collapsing them.
+
+Examples: RANK(), LEAD(), LAG(), SUM() OVER().
+
+How do you optimize a slow SQL query?
+
+Use indexing, avoid SELECT *, optimize joins, and limit subqueries.
+
+How do you find the top 3 highest-paid employees in each department?
+
+SELECT * FROM (  
+    SELECT *, RANK() OVER (PARTITION BY department ORDER BY salary DESC) as rnk  
+    FROM Employees  
+) temp WHERE rnk <= 3;
+Uses RANK() with PARTITION BY.
+
+What is a correlated subquery, and how does it work?
+
+A subquery that depends on the outer query.
+
+Evaluated row by row.
+
+What is a stored procedure, and how does it differ from a function?
+
+Stored Procedure: Can return multiple values and execute queries.
+
+Function: Must return a single value or table and cannot modify data.
+
+What are the differences between OLTP and OLAP databases?
+
+OLTP (Online Transaction Processing): Handles fast, real-time transactions.
+
+OLAP (Online Analytical Processing): Used for complex queries and reporting.
+
+Explain the ACID properties in databases.
+
+Atomicity: All or nothing.
+
+Consistency: Data remains valid.
+
+Isolation: Transactions don’t interfere.
+
+Durability: Changes persist after commit.
+
+What is the difference between DELETE, TRUNCATE, and DROP?
+
+DELETE: Removes specific rows (can be rolled back).
+
+TRUNCATE: Removes all rows (cannot be rolled back).
+
+DROP: Deletes the table itself.
+
+Scenario-Based Questions
+Calculate total revenue per month.
+
+SELECT MONTH(sale_date), SUM(amount) FROM sales GROUP BY MONTH(sale_date);
+Aggregates sales by month.
+
+Find customers who haven’t purchased in 6 months.
+
+SELECT customer_id FROM customers  
+WHERE customer_id NOT IN (SELECT customer_id FROM sales WHERE sale_date > DATEADD(MONTH, -6, GETDATE()));
+Uses NOT IN with date filtering.
+
+Find employees with the same salary.
+
+SELECT salary, COUNT(*) FROM employees GROUP BY salary HAVING COUNT(*) > 1;
+Groups by salary and filters duplicates.
+
+Find the customer who spent the most money.
+
+SELECT customer_id, SUM(amount) AS total_spent FROM sales GROUP BY customer_id ORDER BY total_spent DESC LIMIT 1;
+Finds the top spender.
+
+Find the percentage contribution of each product to total sales.
+
+SELECT product_id, (SUM(amount) * 100 / (SELECT SUM(amount) FROM sales)) AS percentage FROM sales GROUP BY product_id;
+Calculates product contribution to total revenue.
+
+What is the difference between CHAR and VARCHAR?
+
+CHAR(n): Fixed-length storage, always takes n bytes.
+
+VARCHAR(n): Variable-length, uses only required storage.
+
+What is the difference between DROP and TRUNCATE?
+
+DROP: Deletes the table and its structure.
+
+TRUNCATE: Deletes only data but keeps the table structure.
+
+What is a default constraint in SQL?
+
+Assigns a default value to a column if no value is provided.
+
+CREATE TABLE users (id INT, name VARCHAR(50), status VARCHAR(10) DEFAULT 'Active');
+What is a composite key?
+
+A primary key made of two or more columns.
+
+Ensures uniqueness across multiple fields.
+
+How do you select even and odd records from a table?
+
+Even: SELECT * FROM table WHERE id % 2 = 0;
+
+Odd: SELECT * FROM table WHERE id % 2 <> 0;
+
+Intermediate SQL Questions
+What is the difference between COALESCE and ISNULL?
+
+COALESCE returns the first non-null value from multiple columns.
+
+ISNULL replaces NULL with a single specified value.
+
+How do you swap two column values in SQL?
+
+UPDATE table SET col1 = col2, col2 = col1;
+Exchanges values between two columns.
+
+How do you find the Nth highest salary?
+
+SELECT DISTINCT Salary FROM Employees ORDER BY Salary DESC LIMIT 1 OFFSET N-1;
+Skips N-1 salaries and returns the Nth highest.
+
+What is the difference between DELETE and TRUNCATE?
+
+DELETE: Removes specific rows and can be rolled back.
+
+TRUNCATE: Removes all rows without logging, faster than DELETE.
+
+What is the purpose of EXISTS?
+
+SELECT * FROM customers WHERE EXISTS (SELECT 1 FROM orders WHERE customers.id = orders.customer_id);
+Checks if a subquery returns rows, improving efficiency.
+
+What is the use of CASE in SQL?
+
+Works like IF-ELSE for conditional logic.
+
+SELECT name, salary, CASE WHEN salary > 50000 THEN 'High' ELSE 'Low' END AS salary_category FROM employees;
+How do you find NULL values in SQL?
+
+SELECT * FROM table WHERE column IS NULL;
+
+IS NULL checks for missing values.
+
+What is the difference between CROSS JOIN and FULL OUTER JOIN?
+
+CROSS JOIN: Produces the Cartesian product (all combinations).
+
+FULL OUTER JOIN: Returns all matching and non-matching rows from both tables.
+
+How do you replace NULL values in a column?
+
+SELECT COALESCE(column, 'Default Value') FROM table;
+Replaces NULL with a specified value.
+
+What is the purpose of LIMIT in SQL?
+
+Restricts the number of rows returned.
+
+SELECT * FROM employees LIMIT 5;
+Advanced SQL Questions
+How do you generate a sequence of numbers in SQL?
+
+SELECT generate_series(1, 10);
+Used in PostgreSQL to create numeric sequences.
+
+How do you find the first and last record in a table?
+
+First: SELECT * FROM table ORDER BY id ASC LIMIT 1;
+
+Last: SELECT * FROM table ORDER BY id DESC LIMIT 1;
+
+What is a lateral join?
+
+Allows subqueries to reference columns from preceding FROM clause tables.
+
+Similar to applying CROSS APPLY in SQL Server.
+
+What is the difference between LEAD() and LAG()?
+
+LEAD(): Fetches the next row’s value.
+
+LAG(): Fetches the previous row’s value.
+
+How do you delete duplicate rows without using DISTINCT?
+
+DELETE FROM employees WHERE id NOT IN (SELECT MIN(id) FROM employees GROUP BY name, salary);
+Keeps only the first occurrence of each duplicate.
+
+How do you convert rows to columns (pivot) in SQL?
+
+SELECT department, SUM(salary) AS total_salary FROM employees GROUP BY department;
+Aggregates data to pivot rows into columns.
+
+What is a materialized view?
+
+A stored query result that can be refreshed.
+
+Improves performance for complex queries.
+
+What is the difference between a clustered and non-clustered index?
+
+Clustered Index: Stores rows physically in order.
+
+Non-Clustered Index: Creates a separate lookup table for fast searches.
+
+How do you find gaps in a sequence of numbers?
+
+SELECT id + 1 FROM table WHERE NOT EXISTS (SELECT * FROM table WHERE id = t.id + 1);
+Detects missing values in an ID sequence.
+
+How do you write a recursive query to display hierarchical data?
+
+WITH RecursiveCTE AS (
+    SELECT id, parent_id FROM table WHERE parent_id IS NULL  
+    UNION ALL  
+    SELECT t.id, t.parent_id FROM table t INNER JOIN RecursiveCTE r ON t.parent_id = r.id
+) SELECT * FROM RecursiveCTE;
+Used for hierarchical data like employee-manager relationships.
+
+Scenario-Based SQL Questions
+Find customers who made a purchase in the last 7 days.
+
+SELECT * FROM sales WHERE purchase_date >= CURDATE() - INTERVAL 7 DAY;
+Retrieves recent transactions.
+
+Find the top 5 products with the highest sales.
+
+SELECT product_id, SUM(amount) FROM sales GROUP BY product_id ORDER BY SUM(amount) DESC LIMIT 5;
+Aggregates sales data per product.
+
+Identify employees who earn more than their department average.
+
+SELECT name, salary FROM employees e WHERE salary > (SELECT AVG(salary) FROM employees WHERE department = e.department);
+Compares individual salaries with department averages.
+
+Retrieve customers who have never placed an order.
+
+SELECT * FROM customers WHERE id NOT IN (SELECT DISTINCT customer_id FROM orders);
+Identifies customers without transactions.
+
+Find the percentage of total sales for each region.
+
+SELECT region, (SUM(sales) * 100.0 / (SELECT SUM(sales) FROM sales)) AS percentage FROM sales GROUP BY region;
+Computes each region’s contribution to total sales.
+
+Basic SQL Questions
+What is the difference between INNER JOIN and NATURAL JOIN?
+
+INNER JOIN: Matches rows based on specified columns.
+
+NATURAL JOIN: Matches rows using common column names automatically.
+
+What is the use of DISTINCT in SQL?
+
+Removes duplicate values from the result set.
+
+SELECT DISTINCT column_name FROM table;
+How do you rename a column in SQL?
+
+ALTER TABLE table_name RENAME COLUMN old_name TO new_name; (PostgreSQL).
+
+ALTER TABLE table_name CHANGE old_name new_name datatype; (MySQL).
+
+How do you retrieve alternate (odd/even) records from a table?
+
+Odd: SELECT * FROM table WHERE MOD(id, 2) = 1;
+
+Even: SELECT * FROM table WHERE MOD(id, 2) = 0;
+
+How do you check if a column exists in a table?
+
+SELECT column_name FROM information_schema.columns WHERE table_name = 'table' AND column_name = 'column';
+Queries metadata to check column existence.
+
+Intermediate SQL Questions
+How do you retrieve the last N records from a table?
+
+SELECT * FROM table ORDER BY id DESC LIMIT N;
+Orders by ID in descending order and limits results.
+
+What is the difference between NVL and COALESCE?
+
+NVL(): Works with two arguments only (Oracle).
+
+COALESCE(): Works with multiple arguments (Standard SQL).
+
+What is a surrogate key?
+
+A unique, system-generated key that replaces natural keys.
+
+Usually an AUTO_INCREMENT column.
+
+How do you check if two tables have the same data?
+
+SELECT * FROM table1 EXCEPT SELECT * FROM table2;
+Compares records to find differences.
+
+How do you concatenate two columns in SQL?
+
+SELECT CONCAT(first_name, ' ', last_name) FROM employees;
+Merges column values with a separator.
+
+What is the difference between ROLLUP and CUBE in SQL?
+
+ROLLUP: Provides subtotal and grand total aggregations.
+
+CUBE: Provides all possible aggregation combinations.
+
+How do you find employees hired in the last 30 days?
+
+SELECT * FROM employees WHERE hire_date >= CURDATE() - INTERVAL 30 DAY;
+Filters recent hires using date functions.
+
+How do you calculate the median in SQL?
+
+SELECT column FROM table ORDER BY column LIMIT 1 OFFSET (SELECT COUNT(*)/2 FROM table);
+Orders data and selects the middle value.
+
+What is the difference between SUBSTRING and LEFT/RIGHT functions?
+
+SUBSTRING(column, start, length): Extracts part of a string.
+
+LEFT(column, n) / RIGHT(column, n): Extracts from the start/end.
+
+How do you find customers who placed exactly three orders?
+
+SELECT customer_id FROM orders GROUP BY customer_id HAVING COUNT(*) = 3;
+Uses HAVING to filter customers with three orders.
+
+Advanced SQL Questions
+What is the difference between MERGE and UPSERT?
+
+MERGE: Combines INSERT, UPDATE, DELETE in one query.
+
+UPSERT: Inserts if not exists, updates if exists.
+
+How do you implement pagination in SQL?
+
+SELECT * FROM employees LIMIT 10 OFFSET 20;
+Retrieves records in chunks for pagination.
+
+What is a self-join?
+
+A table joins itself using different aliases.
+
+SELECT e1.name, e2.name FROM employees e1 JOIN employees e2 ON e1.manager_id = e2.id;
+How do you remove leading and trailing spaces in SQL?
+
+SELECT TRIM(column) FROM table;
+Removes extra spaces from string values.
+
+What is the difference between CURRENT_TIMESTAMP and SYSDATE()?
+
+CURRENT_TIMESTAMP: Returns timestamp with time zone.
+
+SYSDATE(): Returns the system date and time.
+
+How do you fetch the first record in each group?
+
+SELECT * FROM (SELECT *, RANK() OVER (PARTITION BY category ORDER BY price DESC) AS rnk FROM products) t WHERE rnk = 1;
+Uses RANK() to find top records in each group.
+
+What is a table partition in SQL?
+
+Divides large tables into smaller parts for better performance.
+
+Types: Range, List, Hash, Composite partitioning.
+
+How do you drop a column from a table?
+
+ALTER TABLE table_name DROP COLUMN column_name;
+Removes a specific column from a table.
+
+How do you find duplicate emails in a customer table?
+
+SELECT email, COUNT(*) FROM customers GROUP BY email HAVING COUNT(*) > 1;
+Groups by email and filters duplicates.
+
+How do you retrieve the last login date for each user?
+
+SELECT user_id, MAX(login_date) FROM logins GROUP BY user_id;
+Uses MAX() to get the most recent login date.
+
+Scenario-Based SQL Questions
+Find the highest-selling product by month.
+
+SELECT month, product_id, SUM(sales) FROM sales GROUP BY month, product_id ORDER BY SUM(sales) DESC LIMIT 1;
+Aggregates sales and selects top-selling product per month.
+
+Get the employee with the highest salary in each department.
+
+SELECT * FROM (SELECT *, RANK() OVER (PARTITION BY department ORDER BY salary DESC) AS rnk FROM employees) t WHERE rnk = 1;
+Uses window functions to rank employees by salary.
+
+Find the difference in days between two dates.
+
+SELECT DATEDIFF(end_date, start_date) FROM table;
+Computes the number of days between two dates.
+
+Find orders where total amount is above the average order amount.
+
+SELECT * FROM orders WHERE total_amount > (SELECT AVG(total_amount) FROM orders);
+Compares order amounts to the overall average.
+
+Find customers who have made purchases in all product categories.
+
+SELECT customer_id FROM sales GROUP BY customer_id HAVING COUNT(DISTINCT category) = (SELECT COUNT(DISTINCT category) FROM products);
+Identifies customers who bought from every category.
+
+Find all employees who report to a specific manager.
+
+SELECT * FROM employees WHERE manager_id = (SELECT id FROM employees WHERE name = 'John Doe');
+Filters employees reporting to a given manager.
+
+Identify customers who have made only one purchase.
+
+SELECT customer_id FROM orders GROUP BY customer_id HAVING COUNT(order_id) = 1;
+Uses HAVING to filter single-purchase customers.
+
+Find the most common product category.
+
+SELECT category, COUNT(*) FROM products GROUP BY category ORDER BY COUNT(*) DESC LIMIT 1;
+Groups products by category and selects the most frequent one.
+
+Calculate the total revenue per city.
+
+SELECT city, SUM(total_amount) FROM orders GROUP BY city;
+Aggregates sales revenue by city.
+
+Find employees who haven’t logged in within the last 60 days.
+ 
+SELECT * FROM employees WHERE last_login < CURDATE() - INTERVAL 60 DAY;
+Filters inactive employees based on login history.
+
+What is the purpose of the COUNT function?
+
+ 
+SELECT COUNT(*) FROM employees;
+How do you find the length of a string in SQL?
+
+LENGTH(column) in MySQL, LEN(column) in SQL Server.
+ 
+SELECT LENGTH(name) FROM employees;
+How do you check if a string contains a specific substring?
+
+LIKE '%substring%' for pattern matching.
+ 
+SELECT * FROM products WHERE name LIKE '%Laptop%';
+How do you convert a string to uppercase or lowercase?
+
+UPPER(column) or LOWER(column).
+ 
+SELECT UPPER(name) FROM employees;
+What is the purpose of the REPLACE function?
+
+Replaces part of a string with another value.
+ 
+SELECT REPLACE('Hello World', 'World', 'SQL');
+Intermediate SQL Questions
+How do you extract a portion of a date (year, month, day)?
+
+YEAR(column), MONTH(column), DAY(column).
+ 
+SELECT YEAR(order_date) FROM orders;
+How do you round a decimal value in SQL?
+
+ROUND(column, decimal_places).
+ 
+SELECT ROUND(price, 2) FROM products;
+What is the difference between UNION and UNION ALL?
+
+UNION removes duplicates, UNION ALL keeps all records.
+
+How do you convert a number to a string in SQL?
+
+CAST(column AS VARCHAR) or CONVERT(VARCHAR, column).
+ 
+SELECT CAST(123 AS VARCHAR);
+What is a case-insensitive search in SQL?
+
+Use ILIKE in PostgreSQL or LOWER(column) LIKE in MySQL/SQL Server.
+ 
+SELECT * FROM users WHERE LOWER(name) LIKE '%john%';
+How do you generate random numbers in SQL?
+
+RAND() for decimal, FLOOR(RAND()*100) for integers.
+
+How do you check if a column has only unique values?
+ 
+SELECT COUNT(column) = COUNT(DISTINCT column) FROM table;
+Compares total and distinct counts.
+
+How do you find the second highest salary using LIMIT?
+ 
+SELECT DISTINCT salary FROM employees ORDER BY salary DESC LIMIT 1 OFFSET 1;
+Skips the highest and fetches the next salary.
+
+What is the difference between HAVING and WHERE?
+
+WHERE filters before grouping, HAVING filters after grouping.
+
+What is the COALESCE function used for?
+
+Returns the first non-null value from a list.
+ 
+SELECT COALESCE(NULL, NULL, 'Default Value');
+Advanced SQL Questions
+How do you find gaps in sequential numbers in a table?
+ 
+SELECT id + 1 FROM table WHERE NOT EXISTS (SELECT * FROM table WHERE id = t.id + 1);
+Identifies missing numbers in a sequence.
+
+How do you perform a fuzzy search in SQL?
+
+Use SOUNDEX() or LEVENSHTEIN() (PostgreSQL) for similarity matching.
+
+How do you split a string in SQL?
+
+Use STRING_SPLIT() in SQL Server, regexp_split_to_table() in PostgreSQL.
+
+How do you find duplicate records in a table?
+
+   
+SELECT column, COUNT(*) FROM table GROUP BY column HAVING COUNT(*) > 1;
+Groups by column and filters counts > 1.
+
+How do you pivot rows into columns dynamically?
+
+Use CASE WHEN or PIVOT operator in SQL Server.
+
+How do you perform an anti-join in SQL?
+ 
+SELECT * FROM customers WHERE NOT EXISTS (SELECT 1 FROM orders WHERE customers.id = orders.customer_id);
+Finds records in one table but not in another.
+
+How do you implement a queue in SQL?
+
+Use WITH (ROWLOCK, READPAST) to process rows one by one.
+
+What is the difference between WINDOW functions and GROUP BY?
+
+GROUP BY collapses rows, WINDOW functions retain all rows.
+
+How do you find the most frequently occurring value in a column?
+
+ 
+SELECT column, COUNT(*) FROM table GROUP BY column ORDER BY COUNT(*) DESC LIMIT 1;
+Counts occurrences and selects the highest.
+
+How do you store hierarchical data in SQL?
+
+Use Adjacency List Model (parent-child references) or Nested Set Model (precomputed hierarchy).
+
+Scenario-Based SQL Questions
+Find customers who made their first purchase this year.
+ 
+SELECT customer_id FROM orders GROUP BY customer_id HAVING MIN(order_date) >= '2025-01-01';
+Uses MIN() to find first-time buyers.
+
+Find employees who are the only ones in their department.
+ 
+SELECT * FROM employees GROUP BY department HAVING COUNT(*) = 1;
+Filters departments with only one employee.
+
+Find cities with no registered users.
+ 
+SELECT city FROM cities WHERE city NOT IN (SELECT DISTINCT city FROM users);
+Identifies missing locations.
+
+Find customers who have placed at least two orders on the same day.
+ 
+SELECT customer_id, order_date FROM orders GROUP BY customer_id, order_date HAVING COUNT(*) >= 2;
+Groups by customer and date to find multiple orders.
+
+Find employees who have worked for more than five years.
+ 
+SELECT * FROM employees WHERE DATEDIFF(CURDATE(), hire_date) > 5 * 365;
+Calculates tenure in days.
+
+Identify orders where the total amount exceeds 75% of all orders.
+ 
+SELECT * FROM orders WHERE total_amount > (SELECT PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY total_amount) FROM orders);
+Uses percentile calculation to filter high-value orders.
+
+Find the total revenue contribution of the top 10% of customers.
+ 
+SELECT SUM(total_amount) FROM (SELECT total_amount FROM orders ORDER BY total_amount DESC LIMIT (SELECT COUNT(*) * 0.1 FROM orders)) t;
+Aggregates revenue from the highest-paying customers.
+
+Find the median salary of employees.
+ 
+SELECT AVG(salary) FROM (SELECT salary FROM employees ORDER BY salary LIMIT 2 OFFSET (SELECT COUNT(*) / 2 FROM employees));
+Calculates the median by taking the middle salary.
+
+Find students who scored higher than the average score in their class.
+ 
+SELECT student_id, score FROM scores s WHERE score > (SELECT AVG(score) FROM scores WHERE class_id = s.class_id);
+Compares each student’s score to the class average.
+
+Find the three most common customer complaints.
+ 
+SELECT complaint_type, COUNT(*) FROM complaints GROUP BY complaint_type ORDER BY COUNT(*) DESC LIMIT 3;
+Counts and ranks the top complaint types.
+
+How do you find the current system date in SQL?
+
+SELECT CURRENT_DATE; (PostgreSQL, MySQL), SELECT GETDATE(); (SQL Server).
+
+What is the default sorting order in SQL?
+
+ORDER BY column sorts ascending (ASC) by default.
+
+How do you remove duplicate rows from a table?
+
+  
+DELETE FROM table WHERE id NOT IN (SELECT MIN(id) FROM table GROUP BY column);
+Keeps the first occurrence and deletes duplicates.
+
+What is the difference between NOW() and SYSDATE()?
+
+NOW(): Returns the timestamp at query execution start.
+
+SYSDATE(): Returns the exact system time at execution.
+
+How do you check if a table exists before creating it?
+ 
+CREATE TABLE IF NOT EXISTS employees (id INT, name VARCHAR(50));
+Prevents duplicate table creation.
+
+How do you check the size of a table in SQL?
+ 
+SELECT pg_size_pretty(pg_total_relation_size('table_name'));
+Retrieves table size in PostgreSQL.
+
+How do you find all NULL values in a column?
+ 
+SELECT * FROM table WHERE column IS NULL;
+Filters records where column values are NULL.
+
+What is the difference between CHAR and VARCHAR?
+
+CHAR(n): Fixed-length storage, VARCHAR(n): Variable-length storage.
+
+What does the LIKE operator do in SQL?
+
+Searches for patterns in a column using % (wildcard).
+ 
+SELECT * FROM users WHERE name LIKE 'J%';
+How do you limit the number of rows returned?
+
+LIMIT n (MySQL, PostgreSQL), TOP n (SQL Server), FETCH FIRST n ROWS ONLY (Oracle).
+
+Intermediate SQL Questions
+What is a CTE (Common Table Expression)?
+
+A temporary result set that can be referenced within a query.
+ 
+WITH temp AS (SELECT * FROM employees WHERE salary > 50000) SELECT * FROM temp;
+What is the difference between a primary key and a unique key?
+
+Primary Key: Uniquely identifies rows and cannot be NULL.
+
+Unique Key: Ensures uniqueness but allows NULLs.
+
+How do you find the third highest salary?
+ 
+SELECT DISTINCT salary FROM employees ORDER BY salary DESC LIMIT 1 OFFSET 2;
+Skips the top two salaries and selects the next.
+
+How do you remove all rows from a table but keep its structure?
+
+TRUNCATE TABLE table_name;
+
+How do you swap values between two columns?
+ 
+UPDATE employees SET column1 = column2, column2 = column1;
+Swaps values between two columns in a table.
+
+What is the difference between a LEFT JOIN and a RIGHT JOIN?
+
+LEFT JOIN: Keeps all rows from the left table.
+
+RIGHT JOIN: Keeps all rows from the right table.
+
+How do you calculate the running total of sales?
+ 
+SELECT id, sales, SUM(sales) OVER (ORDER BY id) AS running_total FROM orders;
+Uses window functions for cumulative sum.
+
+How do you check the database version?
+
+SELECT version(); (PostgreSQL), SELECT @@version; (SQL Server).
+
+What is an index, and why is it used?
+
+A performance optimization technique to speed up data retrieval.
+
+How do you drop an index?
+ 
+DROP INDEX index_name ON table_name;
+Removes an index from a table.
+
+Advanced SQL Questions
+How do you find customers who placed at least one order in each category?
+ 
+SELECT customer_id FROM orders GROUP BY customer_id HAVING COUNT(DISTINCT category) = (SELECT COUNT(DISTINCT category) FROM products);
+Ensures every customer has orders in all categories.
+
+How do you delete duplicate rows but keep one copy?
+ 
+DELETE FROM table WHERE id NOT IN (SELECT MIN(id) FROM table GROUP BY column);
+Uses GROUP BY to retain the earliest record.
+
+How do you find employees whose salary is above their department's average?
+ 
+SELECT * FROM employees e WHERE salary > (SELECT AVG(salary) FROM employees WHERE department_id = e.department_id);
+Compares individual salaries with department averages.
+
+What is a materialized view?
+
+A precomputed query result stored for faster access.
+
+How do you fetch the nth highest salary without using LIMIT?
+ 
+SELECT salary FROM (SELECT salary, DENSE_RANK() OVER (ORDER BY salary DESC) rnk FROM employees) t WHERE rnk = n;
+Uses DENSE_RANK() to find the nth salary.
+
+What is the difference between UNION and JOIN?
+
+UNION: Combines results from multiple queries.
+
+JOIN: Merges data from multiple tables based on a condition.
+
+How do you find orders placed in consecutive months?
+ 
+SELECT customer_id, order_date FROM orders WHERE DATEDIFF(order_date, LAG(order_date) OVER (PARTITION BY customer_id ORDER BY order_date)) <= 30;
+Uses LAG() to compare consecutive records.
+
+How do you calculate the percentage of total sales per category?
+ 
+SELECT category, SUM(sales) * 100.0 / (SELECT SUM(sales) FROM orders) AS percentage FROM orders GROUP BY category;
+Computes the category's sales percentage of the total.
+
+How do you find the longest consecutive sequence of login days?
+ 
+SELECT user_id, COUNT(*) FROM (SELECT user_id, DATEDIFF(login_date, LAG(login_date) OVER (PARTITION BY user_id ORDER BY login_date)) AS diff FROM logins) t WHERE diff = 1 GROUP BY user_id;
+Uses LAG() to track consecutive logins.
+
+How do you find employees who have the same salary but work in different departments?
+  
+SELECT e1.* FROM employees e1 JOIN employees e2 ON e1.salary = e2.salary AND e1.department_id <> e2.department_id;
+Matches employees with identical salaries in different departments.
+
+Scenario-Based SQL Questions
+Find the number of active users per month.
+ 
+SELECT MONTH(login_date), COUNT(DISTINCT user_id) FROM logins GROUP BY MONTH(login_date);
+Groups logins by month and counts unique users.
+
+Identify employees who never took leave.
+ 
+SELECT * FROM employees WHERE id NOT IN (SELECT employee_id FROM leaves);
+Finds employees without leave records.
+
+Find customers with at least two orders placed within a week.
+ 
+SELECT customer_id FROM orders GROUP BY customer_id HAVING COUNT(order_id) >= 2 AND MAX(order_date) - MIN(order_date) <= 7;
+Filters customers with multiple orders in a week.
+
+Find all employees hired before their managers.
+
+SELECT e1.* FROM employees e1 JOIN employees e2 ON e1.manager_id = e2.id WHERE e1.hire_date < e2.hire_date;
+Compares hire dates of employees and their managers.
+
+Identify the top 3 best-selling products per category.
+
+SELECT * FROM (SELECT *, RANK() OVER (PARTITION BY category ORDER BY sales DESC) AS rnk FROM products) t WHERE rnk <= 3;
+Uses RANK() to fetch top 3 products per category.
+
+How do you add a new column to an existing table?
+
+Use ALTER TABLE with ADD COLUMN.
+ 
+ALTER TABLE employees ADD COLUMN hire_date DATE;
+How do you create an index on a column?
+ 
+CREATE INDEX idx_employee_name ON employees(name);
+Improves search performance on the specified column.
+
+How do you find the nth smallest value in a table?
+ 
+SELECT MIN(salary) FROM (SELECT salary FROM employees ORDER BY salary LIMIT n) AS temp;
+Retrieves the nth smallest value by limiting and using MIN().
+
+How do you check if a value exists in a column?
+
+Use EXISTS or IN.
+ 
+SELECT * FROM employees WHERE EXISTS (SELECT 1 FROM salaries WHERE employee_id = employees.id);
+How do you join three tables in SQL?
+ 
+SELECT * FROM employees e JOIN departments d ON e.department_id = d.id JOIN projects p ON e.id = p.employee_id;
+Joins three tables based on matching columns.
+
+How do you find the average salary per department?
+ 
+SELECT department_id, AVG(salary) FROM employees GROUP BY department_id;
+Groups by department to calculate the average salary.
+
+How do you find the first and last records of a table?
+ 
+SELECT * FROM employees ORDER BY hire_date LIMIT 1; -- First record
+SELECT * FROM employees ORDER BY hire_date DESC LIMIT 1; -- Last record
+How do you delete records based on a condition in SQL?
+ 
+DELETE FROM employees WHERE department = 'HR';
+Deletes records where the condition matches.
+
+How do you implement a self-join in SQL?
+ 
+SELECT a.name, b.name FROM employees a JOIN employees b ON a.manager_id = b.id;
+Joins a table with itself using aliasing.
+
+Advanced SQL Programming Questions
+How do you perform a full outer join in SQL?
+
+Use FULL OUTER JOIN.
+ 
+SELECT * FROM employees e FULL OUTER JOIN departments d ON e.department_id = d.id;
+How do you calculate the rank of each employee based on salary?
+ 
+SELECT name, salary, RANK() OVER (ORDER BY salary DESC) AS rank FROM employees;
+Uses RANK() window function for ranking.
+
+How do you get the difference between two dates?
+
+Use DATEDIFF().
+ 
+SELECT DATEDIFF('2025-01-01', '2024-01-01');
+How do you get the most recent record for each user?
+ 
+SELECT * FROM (SELECT *, RANK() OVER (PARTITION BY user_id ORDER BY order_date DESC) AS rnk FROM orders) t WHERE rnk = 1;
+Uses RANK() to filter the most recent order for each user.
+
+How do you update a column based on another table's value?
+ 
+UPDATE employees e SET e.salary = (SELECT salary FROM salaries s WHERE s.employee_id = e.id) WHERE e.id = 1;
+Updates based on values from another table.
+
+How do you calculate the cumulative sum of a column?
+ 
+SELECT order_date, sales, SUM(sales) OVER (ORDER BY order_date) AS cumulative_sales FROM orders;
+Uses SUM() window function for cumulative calculation.
+
+How do you handle NULL values in aggregation?
+
+Use COALESCE() or IFNULL() to replace NULLs.
+
+ 
+SELECT department, AVG(COALESCE(salary, 0)) FROM employees GROUP BY department;
+How do you calculate the moving average over a window in SQL?
+ 
+SELECT order_date, sales, AVG(sales) OVER (ORDER BY order_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS moving_avg FROM orders;
+Uses a window function to calculate a moving average.
+
+How do you perform a conditional aggregation?
+
+ 
+SELECT department, SUM(CASE WHEN salary > 50000 THEN salary ELSE 0 END) AS high_salary_sum FROM employees GROUP BY department;
+Performs aggregation with a condition inside CASE.
+
+How do you find employees who have not received any bonuses?
+ 
+SELECT * FROM employees WHERE id NOT IN (SELECT employee_id FROM bonuses);
+Filters employees without bonus records.
+
+How do you create a unique constraint on a column?
+ 
+ALTER TABLE employees ADD CONSTRAINT unique_email UNIQUE (email);
+Adds a constraint to ensure the column has unique values.
+
+Scenario-Based SQL Programming Questions
+Find the top 5 products by total sales.
+ 
+SELECT product_name, SUM(sales) AS total_sales FROM orders GROUP BY product_name ORDER BY total_sales DESC LIMIT 5;
+Sums up sales and returns the top 5 products.
+
+Find the employees who have received a raise (based on salary change).
+ 
+SELECT e.name FROM employees e JOIN salary_history sh ON e.id = sh.employee_id WHERE sh.new_salary > sh.old_salary;
+Identifies employees who have received a salary increase.
+
+Find the most frequently ordered product in the last month.
+ 
+SELECT product_id, COUNT(*) AS order_count FROM orders WHERE order_date >= CURDATE() - INTERVAL 1 MONTH GROUP BY product_id ORDER BY order_count DESC LIMIT 1;
+Counts and ranks products by orders in the last month.
+
+Find the total revenue for each customer in the last quarter.
+SELECT customer_id, SUM(total_amount) AS total_revenue FROM orders WHERE order_date BETWEEN '2024-10-01' AND '2024-12-31' GROUP BY customer_id;
+Sums the total revenue by customer within a specific date range.
+
+Find the employees who have not placed any orders in the last year.
+
+ 
+SELECT e.name FROM employees e LEFT JOIN orders o ON e.id = o.employee_id WHERE o.order_date < '2024-01-01' OR o.order_date IS NULL;
+Filters employees with no orders in the last year.
+
+Find the products that have been ordered more than 5 times but never out of stock.
+ 
+SELECT product_name FROM products p JOIN orders o ON p.id = o.product_id GROUP BY product_name HAVING COUNT(o.product_id) > 5 AND p.stock > 0;
+Filters products that meet the order frequency and stock conditions.
+
+How do you calculate the moving average over a dynamic window size in SQL?
+ 
+SELECT order_date, sales, AVG(sales) OVER (ORDER BY order_date ROWS BETWEEN INTERVAL '7' DAY PRECEDING AND CURRENT ROW) AS moving_avg
+FROM orders;
+Uses dynamic windowing to calculate a 7-day moving average.
+
+How do you identify gaps between dates in a table?
+ 
+SELECT a.order_date, b.order_date
+FROM orders a
+JOIN orders b ON a.order_date = DATE_SUB(b.order_date, INTERVAL 1 DAY)
+WHERE a.customer_id = b.customer_id;
+Finds consecutive records and highlights gaps in dates.
+
+How do you get the second highest salary without using subqueries?
+ 
+SELECT MAX(salary) AS second_highest_salary
+FROM employees
+WHERE salary < (SELECT MAX(salary) FROM employees);
+Filters the maximum salary to find the second highest.
+
+How do you handle cases where there is no data in a date range for an aggregation?
+ 
+SELECT date, COALESCE(SUM(sales), 0) AS total_sales FROM sales_dates
+LEFT JOIN sales_data ON sales_dates.date = sales_data.date
+GROUP BY date;
+Uses COALESCE() to handle missing data in aggregation.
+
+How do you find employees who joined in consecutive months?
+ 
+SELECT e1.name, e2.name
+FROM employees e1
+JOIN employees e2 ON e1.hire_date = DATE_ADD(e2.hire_date, INTERVAL 1 MONTH);
+Finds employees who joined one month after another.
+
+How do you find the longest gap between two consecutive orders from the same customer?
+ 
+SELECT customer_id, MAX(DATEDIFF(order_date, LEAD(order_date) OVER (PARTITION BY customer_id ORDER BY order_date))) AS longest_gap
+FROM orders
+GROUP BY customer_id;
+Uses LEAD() to find the gap between consecutive orders and calculates the longest one.
+
+How do you find the most common word in a column of text data?
+ 
+SELECT word, COUNT(*) AS occurrences
+FROM (SELECT TRIM(word) AS word FROM text_table CROSS JOIN UNNEST(string_to_array(column_name, ' ')) AS word) AS words
+GROUP BY word
+ORDER BY occurrences DESC LIMIT 1;
+Splits text into words, counts occurrences, and finds the most frequent one.
+
+How do you identify records that are duplicated across multiple tables?
+ 
+SELECT t1.id, t2.id
+FROM table1 t1
+JOIN table2 t2 ON t1.id = t2.id
+WHERE t1.value = t2.value;
+Identifies duplicate records based on matching values across tables.
+
+How do you delete rows from a table based on a specific condition in another table?
+ 
+DELETE FROM table1
+WHERE EXISTS (SELECT 1 FROM table2 WHERE table2.id = table1.id AND table2.condition = 'value');
+Deletes rows in table1 based on a condition in table2.
+
+How do you optimize a query that has an ORDER BY clause with a large dataset?
+
+Add an index on the column(s) being used in the ORDER BY clause.
+ 
+CREATE INDEX idx_column_name ON table_name(column_name);
+How do you find users who have made the most orders within a specific timeframe?
+ 
+SELECT user_id, COUNT(order_id) AS order_count
+FROM orders
+WHERE order_date BETWEEN '2024-01-01' AND '2024-12-31'
+GROUP BY user_id
+ORDER BY order_count DESC LIMIT 1;
+Finds the user with the highest order count in a given period.
+
+How do you perform an incremental update in a data warehouse?
+ 
+INSERT INTO target_table (SELECT * FROM staging_table WHERE update_timestamp > last_loaded_time);
+UPDATE target_table SET column_name = staging_table.column_name
+FROM staging_table
+WHERE target_table.id = staging_table.id;
+Uses an incremental loading strategy to update data in a warehouse.
+
+How do you efficiently calculate the difference in minutes between two timestamps for a large dataset?
+ 
+SELECT TIMESTAMPDIFF(MINUTE, start_time, end_time) AS time_difference
+FROM events;
+Uses TIMESTAMPDIFF() to calculate time difference in minutes.
+
+How do you get the first and last record per group using a window function?
+ 
+SELECT id, group_id, value,
+FIRST_VALUE(value) OVER (PARTITION BY group_id ORDER BY order_date) AS first_value,
+LAST_VALUE(value) OVER (PARTITION BY group_id ORDER BY order_date ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS last_value
+FROM records;
+Uses window functions to fetch first and last values per group.
+
+How do you calculate the number of days between two dates, ignoring weekends?
+ 
+SELECT DATEDIFF(end_date, start_date) - (FLOOR(DATEDIFF(end_date, start_date) / 7) * 2) AS business_days
+FROM work_periods;
+Adjusts the date difference to exclude weekends.
+
+How do you identify "orphaned" records (i.e., records without related entries in another table)?
+ 
+SELECT * FROM employees e
+WHERE NOT EXISTS (SELECT 1 FROM orders o WHERE o.employee_id = e.id);
+Identifies employees who have no corresponding orders.
+
+How do you calculate the moving sum for a specific window of rows in SQL?
+ 
+SELECT order_date, sales, SUM(sales) OVER (ORDER BY order_date ROWS BETWEEN 3 PRECEDING AND CURRENT ROW) AS moving_sum
+FROM orders;
+Uses windowing to calculate the sum of sales over a dynamic window of 4 rows.
+
+How do you apply a complex filter to a JOIN operation?
+ 
+SELECT e.name, o.order_date, o.amount
+FROM employees e
+JOIN orders o ON e.id = o.employee_id
+WHERE o.amount > 1000 AND e.department_id = 5;
+Filters the result set based on conditions in both tables.
+
+How do you find the employees with the highest salary for each department?
+ 
+SELECT department_id, name, salary
+FROM (SELECT department_id, name, salary, RANK() OVER (PARTITION BY department_id ORDER BY salary DESC) AS rank
+      FROM employees) AS ranked_employees
+WHERE rank = 1;
+Uses RANK() to identify the top earners in each department.
+
+Advanced Optimization and Performance Tuning
+How do you optimize a query that joins multiple large tables?
+
+Use indexes on the columns involved in JOIN conditions and filters.
+ 
+CREATE INDEX idx_col1 ON table1(col1);
+CREATE INDEX idx_col2 ON table2(col2);
+How do you speed up a query that aggregates large data?
+
+Consider creating summary tables or materialized views to store pre-aggregated data.
+
+How do you use partitioning to improve query performance on large tables?
+
+Partition tables based on columns like date or region to minimize the data scanned.
+
+CREATE TABLE orders PARTITION BY RANGE (order_date);
+How do you ensure that only one query runs at a time in a multi-user environment?
+
+Use LOCK to control concurrent access to resources.
+
+LOCK TABLE table_name IN EXCLUSIVE MODE;
+
+How do you calculate the median of a column in SQL?
+ 
+SELECT percentile_cont(0.5) WITHIN GROUP (ORDER BY salary) AS median_salary
+FROM employees;
+Uses percentile_cont() to calculate the median of a numeric column.
+
+How do you handle hierarchical data (e.g., employee-manager relationships) in SQL?
+ 
+WITH RECURSIVE hierarchy AS (
+    SELECT id, name, manager_id
+    FROM employees
+    WHERE manager_id IS NULL
+    UNION ALL
+    SELECT e.id, e.name, e.manager_id
+    FROM employees e
+    JOIN hierarchy h ON e.manager_id = h.id
+)
+SELECT * FROM hierarchy;
+Uses a recursive CTE to retrieve hierarchical data.
+
+How do you calculate the ratio of a column value to the total sum of the column for each row?
+ 
+SELECT id, value, value / SUM(value) OVER () AS value_ratio
+FROM items;
+Uses window functions to calculate the ratio for each row in relation to the total sum.
+
+How do you perform a full outer join with different matching conditions?
+ 
+SELECT a.id, a.name, b.salary
+FROM employees a
+FULL OUTER JOIN salaries b ON a.id = b.employee_id AND a.department = b.department;
+Performs a full outer join with a custom condition for matching rows.
+
+How do you delete duplicate rows from a table while keeping one?
+ 
+WITH cte AS (
+    SELECT id, ROW_NUMBER() OVER (PARTITION BY name ORDER BY id) AS row_num
+    FROM employees
+)
+DELETE FROM employees WHERE id IN (SELECT id FROM cte WHERE row_num > 1);
+Uses a CTE with ROW_NUMBER() to identify and delete duplicates while keeping the first occurrence.
+
+How do you calculate the difference between two timestamps in hours, ignoring seconds?
+ 
+SELECT EXTRACT(EPOCH FROM (end_time - start_time)) / 3600 AS hours_difference
+FROM events;
+Calculates the time difference in hours using EXTRACT() and EPOCH().
+
+How do you rank rows within groups and handle ties differently than the RANK() function?
+ 
+SELECT id, value, DENSE_RANK() OVER (PARTITION BY category ORDER BY value DESC) AS dense_rank
+FROM items;
+Uses DENSE_RANK() to assign ranks within groups, without skipping rank numbers on ties.
+
+How do you prevent duplicate records while inserting data into a table?
+ 
+INSERT INTO employees (id, name, salary)
+SELECT id, name, salary
+FROM temp_employees
+WHERE NOT EXISTS (SELECT 1 FROM employees WHERE id = temp_employees.id);
+Uses NOT EXISTS to prevent duplicate inserts based on a unique column (e.g., id).
+
+How do you find the longest streak of consecutive dates in a table?
+ 
+WITH date_streak AS (
+    SELECT order_date, DATEDIFF(order_date, ROW_NUMBER() OVER (ORDER BY order_date)) AS streak
+    FROM orders
+)
+SELECT MIN(order_date) AS streak_start, MAX(order_date) AS streak_end
+FROM date_streak
+GROUP BY streak
+ORDER BY streak_end - streak_start DESC
+LIMIT 1;
+Uses ROW_NUMBER() to find consecutive dates and groups them into streaks.
+
+How do you optimize a query with large JOIN operations and missing indexes?
+
+Create appropriate indexes on the columns involved in JOIN, WHERE, and ORDER BY clauses.
+ 
+CREATE INDEX idx_employee_id ON employees(id);
+CREATE INDEX idx_order_employee_id ON orders(employee_id);
+How do you find records with the latest update date in a table?
+ 
+SELECT * FROM orders
+WHERE update_date = (SELECT MAX(update_date) FROM orders);
+Retrieves records with the most recent update date.
+
+How do you perform an update based on values in a different table with conditional logic?
+ 
+UPDATE products p
+SET price = CASE
+    WHEN p.category = 'electronics' THEN p.price * 1.1
+    WHEN p.category = 'clothing' THEN p.price * 1.2
+    ELSE p.price
+END
+FROM discounts d
+WHERE p.id = d.product_id AND d.active = TRUE;
+Uses CASE with conditional logic for updating values from another table.
+
+How do you detect and remove cyclic relationships in a hierarchical data structure?
+ 
+WITH RECURSIVE hierarchy AS (
+    SELECT id, parent_id
+    FROM employees
+    WHERE parent_id IS NULL
+    UNION ALL
+    SELECT e.id, e.parent_id
+    FROM employees e
+    JOIN hierarchy h ON e.parent_id = h.id
+    WHERE e.id != h.id
+)
+SELECT * FROM hierarchy;
+Detects and prevents cyclic relationships in a recursive query by checking for self-references.
+
+How do you identify and count the number of employees working in multiple departments?
+ 
+SELECT employee_id, COUNT(DISTINCT department_id) AS department_count
+FROM employee_departments
+GROUP BY employee_id
+HAVING COUNT(DISTINCT department_id) > 1;
+Groups by employee_id and counts the distinct departments, filtering those working in more than one.
+
+How do you find the average order value by day for the past month?
+
+SELECT order_date, AVG(order_amount) AS average_order_value
+FROM orders
+WHERE order_date BETWEEN CURRENT_DATE - INTERVAL 1 MONTH AND CURRENT_DATE
+GROUP BY order_date;
+Calculates the average order value for each day within the past month.
+
+How do you efficiently count the number of rows in a very large table?
+
+SELECT COUNT(*) FROM large_table;
+For large tables, it is efficient to maintain an approximate count using metadata if exact counts are not needed. You can use database-specific techniques like EXPLAIN or SHOW TABLE STATUS.
+
+How do you find the next available value in a sequence or set of values?
+
+SELECT MIN(number) + 1 AS next_available_number
+FROM numbers
+WHERE number NOT IN (SELECT number FROM taken_numbers);
+Identifies the smallest available value by excluding the used ones.
+
+How do you perform a rolling calculation (e.g., sum of last 5 orders)?
+
+SELECT order_date, SUM(order_amount) OVER (ORDER BY order_date ROWS BETWEEN 4 PRECEDING AND CURRENT ROW) AS rolling_sum
+FROM orders;
+Uses a window function to calculate the rolling sum of the last 5 orders.
+
+How do you handle timezone conversion in SQL?
+
+SELECT order_id, CONVERT_TZ(order_date, 'UTC', 'America/New_York') AS local_order_date
+FROM orders;
+Uses CONVERT_TZ() to handle timezone conversion for datetime columns.
+
+How do you find the longest and shortest gaps between events in a table?
+
+SELECT MIN(DATEDIFF(event_date, LAG(event_date) OVER (ORDER BY event_date))) AS shortest_gap,
+       MAX(DATEDIFF(event_date, LAG(event_date) OVER (ORDER BY event_date))) AS longest_gap
+FROM events;
+Uses LAG() to find the difference between consecutive events and calculates the shortest and longest gaps.
+
+How do you find records where a value is missing from a related table?
+
+SELECT p.product_name
+FROM products p
+LEFT JOIN sales s ON p.product_id = s.product_id
+WHERE s.product_id IS NULL;
+Finds products with no corresponding records in the sales table.
+
+How do you perform a windowed cumulative sum that restarts every year?
+ 
+SELECT order_date, amount,
+       SUM(amount) OVER (PARTITION BY YEAR(order_date) ORDER BY order_date) AS cumulative_sum
+FROM orders;
+Uses PARTITION BY YEAR(order_date) to restart the cumulative sum every year.
+
+How do you identify the first occurrence of a value in a sequence of rows?
+ 
+SELECT id, value, 
+       FIRST_VALUE(value) OVER (ORDER BY order_date) AS first_occurrence
+FROM events;
+Uses FIRST_VALUE() to find the first occurrence of a value in an ordered sequence.
+
+How do you identify and calculate gaps between records in a time series?
+ 
+SELECT id, event_date, 
+       DATEDIFF(event_date, LAG(event_date) OVER (ORDER BY event_date)) AS gap
+FROM events;
+Uses LAG() to calculate the gap between consecutive event dates.
+
+How do you create a recursive CTE for organizational hierarchy with reporting structure?
+ 
+WITH RECURSIVE hierarchy AS (
+    SELECT employee_id, manager_id, name
+    FROM employees
+    WHERE manager_id IS NULL
+    UNION ALL
+    SELECT e.employee_id, e.manager_id, e.name
+    FROM employees e
+    JOIN hierarchy h ON e.manager_id = h.employee_id
+)
+SELECT * FROM hierarchy;
+Uses a recursive CTE to build the hierarchical reporting structure.
+
+How do you perform an UPDATE on a table based on values from a different table, and only update non-null values?
+ 
+UPDATE employees e
+SET e.salary = COALESCE(e.salary, d.salary)
+FROM departments d
+WHERE e.department_id = d.id;
+Uses COALESCE() to update only the non-null values from the departments table.
+
+How do you pivot data for a summary report?
+ 
+SELECT 
+    department, 
+    SUM(CASE WHEN month = 'January' THEN sales ELSE 0 END) AS January_sales,
+    SUM(CASE WHEN month = 'February' THEN sales ELSE 0 END) AS February_sales
+FROM sales_data
+GROUP BY department;
+Uses CASE to pivot the data and calculate the sum for each month by department.
+
+How do you find the average difference between consecutive rows in a table?
+ 
+SELECT AVG(DATEDIFF(end_date, start_date)) AS average_difference
+FROM events;
+Uses DATEDIFF() to calculate the difference between rows and computes the average.
+
+How do you calculate a weighted average for a column based on another column's values?
+ 
+SELECT SUM(value * weight) / SUM(weight) AS weighted_average
+FROM data;
+Calculates the weighted average by multiplying values by weights and dividing by the sum of weights.
+
+How do you find the longest sequence of consecutive days from a table?
+
+WITH date_sequences AS (
+    SELECT order_date, 
+           ROW_NUMBER() OVER (ORDER BY order_date) - DATEDIFF(order_date, MIN(order_date) OVER()) AS sequence_group
+    FROM orders
+)
+SELECT MIN(order_date) AS start_date, MAX(order_date) AS end_date
+FROM date_sequences
+GROUP BY sequence_group
+ORDER BY end_date - start_date DESC
+LIMIT 1;
+Uses ROW_NUMBER() to detect sequences of consecutive days and calculates the longest sequence.
+
+How do you identify and count distinct pairs of related rows from two tables?
+
+SELECT COUNT(DISTINCT a.id, b.id) AS unique_pairs
+FROM table_a a
+JOIN table_b b ON a.related_id = b.related_id;
+Uses COUNT(DISTINCT ...) to count distinct pairs based on a common relationship.
+
+How do you calculate the moving median over a window of rows?
+
+SELECT order_date, sales, 
+       PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY sales) OVER (ORDER BY order_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS moving_median
+FROM orders;
+Uses PERCENTILE_CONT() to calculate a moving median over a specified window.
+
+How do you avoid deadlock in a multi-user environment when updating multiple tables?
+
+Ensure consistent locking order (e.g., always lock table A before table B) and minimize the time spent holding locks.
+
+LOCK TABLE table_a, table_b;
+UPDATE table_a SET value = new_value WHERE condition;
+UPDATE table_b SET value = new_value WHERE condition;
+How do you calculate the rank of each row within a partition, skipping numbers on ties?
+
+SELECT id, score, RANK() OVER (PARTITION BY department ORDER BY score DESC) AS rank
+FROM employees;
+Uses RANK() to assign a rank while skipping numbers when there are ties.
+
+How do you calculate the cumulative sum over a window but exclude certain rows?
+
+SELECT order_date, amount, 
+       SUM(CASE WHEN status = 'completed' THEN amount ELSE 0 END) 
+       OVER (ORDER BY order_date) AS cumulative_sum
+FROM orders;
+Uses CASE to exclude rows that don’t meet a condition from the cumulative sum.
+
+How do you calculate the percentage change between two rows of data?
+
+SELECT id, value, 
+       (value - LAG(value) OVER (ORDER BY date)) / LAG(value) OVER (ORDER BY date) * 100 AS percentage_change
+FROM data;
+Uses LAG() to find the previous row’s value and calculates the percentage change.
+
+How do you calculate the N-th highest value using window functions?
+
+SELECT id, value, 
+       DENSE_RANK() OVER (ORDER BY value DESC) AS rank
+FROM data
+WHERE rank = N;
+Uses DENSE_RANK() to rank the rows and filters for the N-th highest value.
+
+How do you calculate the total number of business days between two dates excluding weekends?
+
+SELECT COUNT(*) 
+FROM generate_series(start_date, end_date, '1 day'::interval) AS day
+WHERE EXTRACT(DOW FROM day) NOT IN (0, 6);
+Uses generate_series to create a list of dates and filters out weekends.
+
+How do you prevent insert anomalies by enforcing referential integrity between tables?
+
+ALTER TABLE orders ADD CONSTRAINT fk_customer FOREIGN KEY (customer_id) REFERENCES customers(id);
+Enforces referential integrity by creating a foreign key constraint.
+
+How do you find the longest time period between two events in a table, considering time zones?
+
+SELECT MAX(TIMESTAMPDIFF(SECOND, event1_timestamp, event2_timestamp)) AS longest_gap
+FROM events
+WHERE event1_timestamp IS NOT NULL AND event2_timestamp IS NOT NULL;
+Calculates the maximum difference between two event timestamps, considering time zone conversions if needed.
+
+How do you handle complex data transformations in SQL using a series of steps or operations?
+
+Use Common Table Expressions (CTEs) to break down the transformation into manageable steps.
+
+WITH step1 AS (SELECT * FROM table WHERE condition),
+     step2 AS (SELECT id, SUM(value) FROM step1 GROUP BY id),
+     step3 AS (SELECT id, AVG(value) FROM step2)
+SELECT * FROM step3;
+
+How do you filter data based on complex conditions in a WHERE clause?
+
+SELECT id, value
+FROM data
+WHERE (value > 100 AND value < 200) OR (status = 'active');
+Filters data based on complex conditions using logical operators (AND, OR).
+
+How do you calculate the cumulative product of a column using SQL window functions?
+ 
+SELECT id, value,
+       EXP(SUM(LN(value)) OVER (ORDER BY id)) AS cumulative_product
+FROM data;
+Uses EXP(SUM(LN(value))) to calculate the cumulative product by first taking the logarithm of each value and summing them.
+
+How do you find the previous and next values in a time series data using SQL?
+
+
+SELECT id, value,
+       LAG(value) OVER (ORDER BY timestamp) AS previous_value,
+       LEAD(value) OVER (ORDER BY timestamp) AS next_value
+FROM time_series;
+Uses LAG() and LEAD() to find the previous and next values for each row based on the timestamp.
+
+How do you perform a UNION without duplicates (distinct results only)?
+ 
+SELECT column1, column2 FROM table1
+UNION
+SELECT column1, column2 FROM table2;
+The UNION operator automatically removes duplicate rows between the two result sets.
+
+How do you update a table with values from another table using a join condition?
+ 
+UPDATE a
+SET a.salary = b.salary
+FROM employees a
+JOIN salary_updates b ON a.id = b.employee_id
+WHERE b.salary > 50000;
+Performs an UPDATE using a JOIN between two tables and applies conditions.
+
+How do you count the number of occurrences of a pattern in a column?
+ 
+SELECT COUNT(*) 
+FROM data 
+WHERE column_name LIKE '%pattern%';
+Uses LIKE with a pattern to count rows containing a substring.
+
+How do you find and return all rows where a date is within a specific range (inclusive)?
+ 
+SELECT *
+FROM events
+WHERE event_date BETWEEN '2024-01-01' AND '2024-12-31';
+Uses BETWEEN to filter rows within a specific range, inclusive of the endpoints.
+
+How do you delete duplicate rows while keeping the first occurrence in SQL?
+ 
+DELETE FROM data
+WHERE id NOT IN (
+    SELECT MIN(id)
+    FROM data
+    GROUP BY column1, column2
+);
+Deletes rows where the id is not the first occurrence of a duplicate set.
+
+How do you calculate the median value from a set of data?
+ 
+SELECT percentile_cont(0.5) WITHIN GROUP (ORDER BY value) AS median
+FROM data;
+Uses percentile_cont() to calculate the median of a column's values.
+
+How do you count the number of distinct values for each category in SQL?
+ 
+SELECT category, COUNT(DISTINCT value) AS distinct_count
+FROM data
+GROUP BY category;
+Uses COUNT(DISTINCT ...) to count the number of unique values in each category.
+
+How do you perform a subquery to check if a record exists in a table?
+ 
+SELECT id, name
+FROM employees
+WHERE id IN (SELECT employee_id FROM attendance WHERE status = 'absent');
+Uses a subquery to filter rows based on the result of another query.
+
+How do you calculate the mode (most frequent value) in a column?
+ 
+SELECT value
+FROM data
+GROUP BY value
+ORDER BY COUNT(*) DESC
+LIMIT 1;
+Groups by value and orders by count to find the most frequent value.
+
+How do you handle large result sets by paginating the results?
+ 
+SELECT * FROM data
+ORDER BY id
+LIMIT 10 OFFSET 20;
+Uses LIMIT and OFFSET to paginate results, displaying a specific subset of rows.
+
+How do you calculate the standard deviation of a column?
+ 
+SELECT STDDEV(value) AS standard_deviation
+FROM data;
+Uses STDDEV() to calculate the standard deviation of a column.
+
+How do you identify missing or NULL values in a column and filter them?
+ 
+SELECT * FROM data
+WHERE value IS NULL;
+Filters rows where the value column contains NULL.
+
+How do you concatenate values from multiple rows into a single row in SQL?
+ 
+SELECT department, STRING_AGG(employee_name, ', ') AS employee_names
+FROM employees
+GROUP BY department;
+Uses STRING_AGG() to concatenate multiple rows into a single string, grouped by department.
+
+How do you compare two columns for equality in SQL?
+ 
+SELECT * FROM data
+WHERE column1 = column2;
+Compares two columns for equality and filters rows where both are equal.
+
+How do you group data based on week number of a year?
+ 
+SELECT EXTRACT(WEEK FROM order_date) AS week_number, SUM(sales) AS total_sales
+FROM orders
+GROUP BY week_number;
+Uses EXTRACT(WEEK FROM ...) to group data by the week number of a year.
+
+How do you check for the existence of a column in a table before performing a query?
+ 
+SELECT column_name 
+FROM information_schema.columns
+WHERE table_name = 'your_table' AND column_name = 'your_column';
+Queries information_schema.columns to check if a column exists in the table.
+
+How do you calculate the percentage of total for each row in SQL?
+ 
+SELECT id, value, 
+       (value / SUM(value) OVER ()) * 100 AS percentage_of_total
+FROM data;
+Uses a window function SUM() to calculate the total and then finds each row’s percentage of the total.
+
+How do you perform a full outer join between two tables?
+ 
+SELECT a.id, a.value, b.value
+FROM table_a a
+FULL OUTER JOIN table_b b ON a.id = b.id;
+Uses FULL OUTER JOIN to return all records from both tables, with matching rows from both sides when available.
+
+How do you update one table using values from another table and conditionally check for matches?
+ 
+UPDATE employees
+SET salary = (SELECT salary FROM salary_updates WHERE employee_id = employees.id)
+WHERE EXISTS (SELECT 1 FROM salary_updates WHERE employee_id = employees.id);
+Uses a subquery with WHERE EXISTS to update values based on a condition.
+
+How do you retrieve the first and last rows from a result set?
+ 
+SELECT * FROM (SELECT * FROM data ORDER BY id LIMIT 1) AS first_row
+UNION ALL
+SELECT * FROM (SELECT * FROM data ORDER BY id DESC LIMIT 1) AS last_row;
+Combines two queries with UNION ALL to retrieve the first and last rows.
+
+How do you find the second-highest value from a column?
+ 
+SELECT MAX(value) AS second_highest
+FROM data
+WHERE value < (SELECT MAX(value) FROM data);
+Finds the second-highest value by excluding the maximum value in a subquery.
+
+How do you perform conditional counting based on multiple criteria in SQL?
+ 
+SELECT category, 
+       COUNT(CASE WHEN status = 'active' THEN 1 END) AS active_count,
+       COUNT(CASE WHEN status = 'inactive' THEN 1 END) AS inactive_count
+FROM transactionsHow do you perform an "EXCEPT" operation to get rows from one table that are not in another?
+ 
+SELECT id, value FROM table1
+EXCEPT
+SELECT id, value FROM table2;
+The EXCEPT operator returns rows from the first query that do not appear in the second query.
+
+How do you find the rank of rows within a partition?
+ 
+SELECT id, value,
+       RANK() OVER (PARTITION BY category ORDER BY value DESC) AS rank
+FROM data;
+RANK() assigns a rank to rows within each partition, based on the specified order.
+
+How do you calculate the cumulative count of rows in SQL?
+ 
+SELECT id, value,
+       COUNT(*) OVER (ORDER BY id) AS cumulative_count
+FROM data;
+Uses the COUNT() window function to calculate the cumulative count of rows.
+
+How do you select rows based on a dynamic date range (e.g., last 30 days)?
+ 
+SELECT * FROM orders
+WHERE order_date >= CURRENT_DATE - INTERVAL '30 days';
+Filters rows based on a dynamic date range by subtracting an interval from the current date.
+
+How do you combine data from multiple columns into a single column?
+
+ 
+SELECT id, CONCAT(first_name, ' ', last_name) AS full_name
+FROM employees;
+Uses CONCAT() to combine values from multiple columns into a single column.
+
+How do you remove leading and trailing spaces from a column in SQL?
+
+sql
+Copy
+Edit
+SELECT TRIM(column_name) AS cleaned_column FROM data;
+Uses TRIM() to remove spaces from both the beginning and the end of a string.
+
+How do you count the number of occurrences of a value in a column while excluding nulls?
+
+sql
+Copy
+Edit
+SELECT COUNT(value) AS non_null_count
+FROM data;
+COUNT() ignores NULL values, so it only counts non-null occurrences.
+
+How do you retrieve the first N rows ordered by a specific column?
+
+sql
+Copy
+Edit
+SELECT * FROM data
+ORDER BY value DESC
+LIMIT 10;
+Uses LIMIT to retrieve the top N rows after ordering by a specific column.
+
+How do you perform a CROSS JOIN between two tables?
+
+sql
+Copy
+Edit
+SELECT a.id, b.value
+FROM table1 a
+CROSS JOIN table2 b;
+CROSS JOIN returns the Cartesian product of two tables, combining each row from one table with every row from the other table.
+
+How do you find the total number of rows in a table?
+
+sql
+Copy
+Edit
+SELECT COUNT(*) FROM data;
+Uses COUNT(*) to return the total number of rows in a table.
+
+How do you check if a column contains a specific substring?
+
+sql
+Copy
+Edit
+SELECT * FROM data
+WHERE column_name LIKE '%substring%';
+Uses LIKE with wildcards to check if a column contains a specific substring.
+
+How do you find the first non-null value in a column?
+
+sql
+Copy
+Edit
+SELECT COALESCE(value, 'default_value') AS first_non_null
+FROM data;
+Uses COALESCE() to return the first non-null value in a column or a default value if all are null.
+
+How do you perform a full-text search in SQL?
+
+sql
+Copy
+Edit
+SELECT * FROM articles
+WHERE MATCH(title, body) AGAINST('search term');
+Uses MATCH() and AGAINST() for full-text search in supported databases.
+
+How do you group data by a rolling period, such as the last 7 days?
+
+sql
+Copy
+Edit
+SELECT SUM(sales) AS total_sales
+FROM sales_data
+WHERE order_date >= CURRENT_DATE - INTERVAL '7 days'
+GROUP BY EXTRACT(DAY FROM order_date);
+Filters the data to a rolling period and groups by the day of the order date.
+
+How do you join a table with a subquery that returns multiple columns?
+
+sql
+Copy
+Edit
+SELECT a.id, a.name, b.total_sales
+FROM employees a
+JOIN (SELECT employee_id, SUM(sales) AS total_sales
+      FROM sales GROUP BY employee_id) b
+ON a.id = b.employee_id;
+Joins a table with a subquery that returns multiple columns.
+
+How do you ensure that updates are made atomically across multiple tables?
+
+sql
+Copy
+Edit
+BEGIN TRANSACTION;
+UPDATE table1 SET column1 = value WHERE condition;
+UPDATE table2 SET column2 = value WHERE condition;
+COMMIT;
+Wraps the update operations in a transaction to ensure atomicity.
+
+How do you create a temporary table to store intermediate results?
+
+sql
+Copy
+Edit
+CREATE TEMPORARY TABLE temp_table AS
+SELECT id, value FROM data WHERE condition;
+Uses CREATE TEMPORARY TABLE to store temporary data for the duration of a session.
+
+How do you delete all rows in a table without dropping the table?
+
+sql
+Copy
+Edit
+DELETE FROM table_name;
+Deletes all rows from a table while keeping the table structure intact.
+
+How do you find the differences between two sets of data (similar to EXCEPT but with more detail)?
+
+sql
+Copy
+Edit
+SELECT * FROM table1
+WHERE NOT EXISTS (SELECT 1 FROM table2 WHERE table1.id = table2.id);
+Uses NOT EXISTS to find rows in table1 that do not exist in table2.
+
+How do you perform an update on rows based on an aggregated value from another table?
+
+sql
+Copy
+Edit
+UPDATE employees
+SET salary = (SELECT AVG(salary) FROM salary_updates WHERE employee_id = employees.id)
+WHERE department = 'Sales';
+Updates rows based on an aggregated value (like AVG) from a related table.
+
+How do you filter data using a pattern match that is case-insensitive?
+
+sql
+Copy
+Edit
+SELECT * FROM data
+WHERE LOWER(column_name) LIKE LOWER('%pattern%');
+Uses LOWER() to make both the column and pattern case-insensitive during the match.
+
+How do you retrieve the nth highest salary from a table?
+
+sql
+Copy
+Edit
+SELECT DISTINCT salary
+FROM employees
+ORDER BY salary DESC
+LIMIT 1 OFFSET N-1;
+Uses LIMIT and OFFSET to retrieve the nth highest salary by sorting and skipping the previous rows.
+
+How do you calculate the date difference in days between two date columns?
+
+sql
+Copy
+Edit
+SELECT DATEDIFF(end_date, start_date) AS date_diff
+FROM data;
+Uses DATEDIFF() to calculate the number of days between two date columns.
+
+How do you handle data updates for rows with specific conditions while retaining the original values?
+
+sql
+Copy
+Edit
+UPDATE data
+SET column1 = CASE WHEN condition THEN new_value ELSE column1 END;
+Uses CASE to conditionally update a column while retaining the original values when the condition is not met.
+
+How do you perform a dynamic SQL query based on user input?
+
+sql
+Copy
+Edit
+EXECUTE IMMEDIATE 'SELECT * FROM ' || table_name || ' WHERE column = :1' USING input_value;
+Uses dynamic SQL (EXECUTE IMMEDIATE) to run queries based on variables, like user input.
+GROUP BY category;
+Uses CASE inside COUNT() to conditionally count based on multiple criteria.
+
+How do you perform a recursive query in SQL?
+
+sql
+Copy
+Edit
+WITH RECURSIVE employee_hierarchy AS (
+  SELECT id, manager_id, name
+  FROM employees
+  WHERE manager_id IS NULL
+  UNION ALL
+  SELECT e.id, e.manager_id, e.name
+  FROM employees e
+  JOIN employee_hierarchy eh ON e.manager_id = eh.id
+)
+SELECT * FROM employee_hierarchy;
+Uses a WITH RECURSIVE CTE to traverse hierarchical data, such as an organizational structure.
+
+How do you handle nulls in the result of an aggregate function?
+
+sql
+Copy
+Edit
+SELECT department, COALESCE(AVG(salary), 0) AS avg_salary
+FROM employees
+GROUP BY department;
+Uses COALESCE() to return a default value (0) for null results in aggregate functions.
+
+How do you filter results based on a subquery with multiple columns?
+
+sql
+Copy
+Edit
+SELECT id, name
+FROM employees
+WHERE (department, salary) IN (SELECT department, MAX(salary) FROM employees GROUP BY department);
+Uses a subquery with multiple columns to filter rows based on a specific condition.
+
+How do you pivot data in SQL?
+
+sql
+Copy
+Edit
+SELECT department,
+       MAX(CASE WHEN month = 'January' THEN sales END) AS January_sales,
+       MAX(CASE WHEN month = 'February' THEN sales END) AS February_sales
+FROM sales
+GROUP BY department;
+Pivots data by turning rows into columns using CASE statements.
+
+How do you get the most recent row for each group in a table?
+
+sql
+Copy
+Edit
+SELECT id, value, timestamp
+FROM data
+WHERE (id, timestamp) IN (SELECT id, MAX(timestamp) FROM data GROUP BY id);
+Uses a subquery to find the most recent row for each id by comparing timestamp.
+
+How do you compute the difference between two dates in months?
+
+sql
+Copy
+Edit
+SELECT DATEDIFF(month, start_date, end_date) AS date_diff_in_months
+FROM data;
+Uses DATEDIFF() to calculate the difference between two dates in months.
+
+How do you check if a column contains any nulls in SQL?
+
+sql
+Copy
+Edit
+SELECT CASE WHEN COUNT(column_name) < COUNT(*) THEN 'Contains NULLs' ELSE 'No NULLs' END
+FROM data;
+Compares the count of non-null values against the total count to check for NULL values.
+
+How do you remove leading zeros from a column in SQL?
+
+sql
+Copy
+Edit
+SELECT CAST(column_name AS UNSIGNED) AS cleaned_column
+FROM data;
+Uses CAST() to remove leading zeros by converting the value to an unsigned number.
+
+How do you find the first and last occurrence of a value in a column?
+
+sql
+Copy
+Edit
+SELECT id, value, 
+       FIRST_VALUE(value) OVER (PARTITION BY category ORDER BY timestamp) AS first_value,
+       LAST_VALUE(value) OVER (PARTITION BY category ORDER BY timestamp ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS last_value
+FROM data;
+Uses FIRST_VALUE() and LAST_VALUE() window functions to find the first and last occurrence.
+
+How do you find the percentage distribution of a column value by groups?
+
+sql
+Copy
+Edit
+SELECT category, 
+       (COUNT(*) * 100.0 / SUM(COUNT(*)) OVER ()) AS percentage
+FROM data
+GROUP BY category;
+Uses COUNT() and SUM() window functions to calculate the percentage distribution.
+
+How do you convert a column to lowercase in SQL?
+
+sql
+Copy
+Edit
+SELECT LOWER(column_name) AS lower_case_column FROM data;
+Uses LOWER() to convert a column's values to lowercase.
+
+How do you remove duplicates from a query result without using DISTINCT?
+
+sql
+Copy
+Edit
+SELECT id, value
+FROM data
+WHERE rowid IN (SELECT MIN(rowid) FROM data GROUP BY value);
+Filters out duplicates by selecting only the first occurrence based on the rowid.
+
+How do you update multiple columns based on a condition in SQL?
+
+sql
+Copy
+Edit
+UPDATE data
+SET column1 = new_value1, column2 = new_value2
+WHERE condition;
+Updates multiple columns simultaneously based on a condition.
+
+How do you generate a series of numbers or dates in SQL?
+
+sql
+Copy
+Edit
+WITH RECURSIVE num_series AS (
+  SELECT 1 AS num
+  UNION ALL
+  SELECT num + 1 FROM num_series WHERE num < 10
+)
+SELECT * FROM num_series;
+Generates a series of numbers using a recursive query.
+
+How do you calculate the cumulative sum of a column using a window function?
+
+sql
+Copy
+Edit
+SELECT id, value,
+       SUM(value) OVER (ORDER BY id) AS cumulative_sum
+FROM data;
+Uses SUM() with a window function to calculate the cumulative sum.
+
+How do you filter rows that match a pattern in SQL, but only for non-null values?
+
+sql
+Copy
+Edit
+SELECT * FROM data
+WHERE column_name LIKE '%pattern%' AND column_name IS NOT NULL;
+Filters rows containing a pattern, excluding NULL values.
+
+How do you find all rows with a duplicate value in a column?
+
+sql
+Copy
+Edit
+SELECT column_name, COUNT(*) AS count
+FROM data
+GROUP BY column_name
+HAVING COUNT(*) > 1;
+Groups rows by a column and filters to return only those with duplicates.
+
+How do you use a correlated subquery in SQL?
+
+sql
+Copy
+Edit
+SELECT id, value
+FROM data d
+WHERE value > (SELECT AVG(value) FROM data WHERE id = d.id);
+Uses a correlated subquery to filter rows based on a comparison with an aggregate value for the same row.
+
+How do you use CASE statements for conditional calculations in SQL?
+
+sql
+Copy
+Edit
+SELECT id, value,
+       CASE 
+         WHEN value > 100 THEN 'High'
+         WHEN value <= 100 THEN 'Low'
+         ELSE 'Unknown'
+       END AS value_category
+FROM data;
+Uses CASE for conditional logic in SQL queries to categorize or calculate values.
+
+How do you join three tables using INNER JOIN?
+
+sql
+Copy
+Edit
+SELECT a.id, b.name, c.salary
+FROM employees a
+INNER JOIN departments b ON a.department_id = b.id
+INNER JOIN salaries c ON a.id = c.employee_id;
+Performs multiple INNER JOIN operations to combine rows from three tables based on matching conditions.
+
+How do you find the average value of a column while excluding a specific value (e.g., excluding NULL)?
+
+sql
+Copy
+Edit
+SELECT AVG(value) AS avg_value
+FROM data
+WHERE value IS NOT NULL;
+Excludes NULL values while calculating the average.
+
+How do you perform a self-join in SQL?
+
+sql
+Copy
+Edit
+SELECT a.id, a.name, b.name AS manager_name
+FROM employees a
+LEFT JOIN employees b ON a.manager_id = b.id;
+Joins the table with itself to relate each employee to their manager.
+
+How do you calculate the exponential growth between two values in SQL?
+
+sql
+Copy
+Edit
+SELECT value, EXP(value) AS exponential_growth
+FROM data;
+Uses EXP() to calculate the exponential of a column's values.
+
+How do you retrieve rows based on the nth occurrence of a value in a column?
+
+sql
+Copy
+Edit
+SELECT id, value
+FROM (SELECT id, value, ROW_NUMBER() OVER (ORDER BY timestamp) AS row_num
+      FROM data) AS subquery
+WHERE row_num = N;
+Uses ROW_NUMBER() to retrieve the nth occurrence based on ordering.
+
+How do you calculate the moving average in SQL?
+
+sql
+Copy
+Edit
+SELECT id, value,
+       AVG(value) OVER (ORDER BY id ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS moving_avg
+FROM data;
+Uses AVG() with a window function to calculate a moving average over a specified window.
+
+How do you find the median value of a column in SQL?
+
+sql
+Copy
+Edit
+SELECT AVG(value) AS median
+FROM (SELECT value FROM data ORDER BY value LIMIT 2 OFFSET (SELECT COUNT(*) / 2 FROM data));
+Computes the median by averaging the two middle values for an odd number of rows or the middle value for an even number.
+
+How do you generate a random number for each row in SQL?
+
+sql
+Copy
+Edit
+SELECT id, RANDOM() AS random_number
+FROM data;
+Uses the RANDOM() function to generate a random number for each row.
+
+How do you perform a LEFT JOIN and exclude rows with no matches from the right table?
+
+sql
+Copy
+Edit
+SELECT a.id, b.value
+FROM table1 a
+LEFT JOIN table2 b ON a.id = b.id
+WHERE b.id IS NOT NULL;
+Filters out rows from the left table that have no corresponding matches in the right table after a LEFT JOIN.
+
+How do you calculate the number of days between two dates in SQL?
+
+sql
+Copy
+Edit
+SELECT DATEDIFF(end_date, start_date) AS days_difference
+FROM data;
+Uses DATEDIFF() to calculate the number of days between two date columns.
+
+How do you find the second highest value in a column?
+
+sql
+Copy
+Edit
+SELECT MAX(value) AS second_highest
+FROM data
+WHERE value < (SELECT MAX(value) FROM data);
+Uses a subquery to exclude the highest value and find the second highest.
+
+How do you get the count of distinct values in a column?
+
+sql
+Copy
+Edit
+SELECT COUNT(DISTINCT column_name) AS distinct_count
+FROM data;
+Uses COUNT(DISTINCT) to count distinct values in a column.
+
+How do you get a row number for each row in the result set?
+
+sql
+Copy
+Edit
+SELECT id, value, ROW_NUMBER() OVER (ORDER BY value) AS row_num
+FROM data;
+Uses ROW_NUMBER() to generate a unique sequential number for each row in the result set.
+
+How do you perform a full outer join in SQL?
+
+sql
+Copy
+Edit
+SELECT a.id, b.value
+FROM table1 a
+FULL OUTER JOIN table2 b ON a.id = b.id;
+Performs a FULL OUTER JOIN to return all rows from both tables, with NULL where there is no match.
+
+How do you identify rows with duplicates based on multiple columns?
+
+sql
+Copy
+Edit
+SELECT column1, column2, COUNT(*)
+FROM data
+GROUP BY column1, column2
+HAVING COUNT(*) > 1;
+Groups rows by multiple columns and filters to return only duplicates.
+
+How do you limit the results of a query based on a specific percentage (e.g., top 10%)?
+
+sql
+Copy
+Edit
+SELECT * FROM data
+ORDER BY value DESC
+LIMIT (SELECT FLOOR(COUNT(*) * 0.1) FROM data);
+Limits the result to the top 10% by counting the rows and using LIMIT.
+
+How do you group data by a rolling 7-day window?
+
+sql
+Copy
+Edit
+SELECT SUM(sales) AS weekly_sales
+FROM sales
+WHERE order_date >= CURRENT_DATE - INTERVAL '7 days'
+GROUP BY EXTRACT(week FROM order_date);
+Filters the data to the last 7 days and groups it by week.
+
+How do you remove trailing spaces from a string in SQL?
+
+sql
+Copy
+Edit
+SELECT RTRIM(column_name) AS cleaned_column
+FROM data;
+Uses RTRIM() to remove trailing spaces from a string.
+
+How do you retrieve all rows where a column value is greater than its average?
+
+sql
+Copy
+Edit
+SELECT * FROM data
+WHERE value > (SELECT AVG(value) FROM data);
+Filters rows where the value is greater than the average value of the column.
+
+How do you create an index on multiple columns?
+
+sql
+Copy
+Edit
+CREATE INDEX idx_name ON table_name (column1, column2);
+Creates an index on multiple columns to optimize queries that use both.
+
+How do you find the total number of distinct combinations of two columns?
+
+sql
+Copy
+Edit
+SELECT COUNT(DISTINCT column1, column2) AS distinct_combinations
+FROM data;
+Counts the distinct combinations of two columns in the result set.
+
+How do you use a window function to calculate the moving sum of a column?
+
+sql
+Copy
+Edit
+SELECT id, value,
+       SUM(value) OVER (ORDER BY id ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS moving_sum
+FROM data;
+Uses the SUM() window function to calculate the moving sum of a column.
+
+How do you get a random sample of rows from a table?
+
+sql
+Copy
+Edit
+SELECT * FROM data
+ORDER BY RANDOM()
+LIMIT 10;
+Uses RANDOM() to shuffle the rows and LIMIT to retrieve a random sample.
+
+How do you change the data type of a column in SQL?
+
+sql
+Copy
+Edit
+ALTER TABLE table_name
+MODIFY COLUMN column_name NEW_DATA_TYPE;
+Uses ALTER TABLE to modify a column's data type.
+
+How do you use the LEAD() window function in SQL?
+
+sql
+Copy
+Edit
+SELECT id, value,
+       LEAD(value) OVER (ORDER BY id) AS next_value
+FROM data;
+Uses LEAD() to retrieve the next row's value in a result set based on the specified order.
+
+How do you calculate the percentage change between two consecutive rows?
+
+sql
+Copy
+Edit
+SELECT id, value,
+       (value - LAG(value) OVER (ORDER BY id)) / LAG(value) OVER (ORDER BY id) * 100 AS percentage_change
+FROM data;
+Uses LAG() to compare each row to the previous row and calculate the percentage change.
+
+How do you handle null values in an aggregate function like SUM()?
+
+sql
+Copy
+Edit
+SELECT SUM(COALESCE(value, 0)) AS total_value
+FROM data;
+Uses COALESCE() to replace NULL values with 0 before performing the SUM().
+
+How do you find the common values between two tables without using JOIN?
+
+sql
+Copy
+Edit
+SELECT value
+FROM table1
+WHERE value IN (SELECT value FROM table2);
+Uses a subquery with IN to find the common values between two tables.
+
+How do you check if a value exists in a subquery result in SQL?
+
+sql
+Copy
+Edit
+SELECT * FROM data
+WHERE value = (SELECT MAX(value) FROM data);
+Uses a subquery in the WHERE clause to check if a value exists in the result set.
+
+How do you perform a FULL OUTER JOIN but with filtering on one side?
+
+sql
+Copy
+Edit
+SELECT a.id, b.value
+FROM table1 a
+FULL OUTER JOIN table2 b ON a.id = b.id
+WHERE b.value IS NOT NULL;
+Performs a FULL OUTER JOIN and filters results where b.value is not NULL.
+
+How do you extract the first character of a string in SQL?
+
+sql
+Copy
+Edit
+SELECT LEFT(column_name, 1) AS first_char
+FROM data;
+Uses LEFT() to extract the first character of a string.
+
+How do you convert a column to a specific time zone in SQL?
+
+sql
+Copy
+Edit
+SELECT column_name AT TIME ZONE 'UTC' AS utc_time
+FROM data;
+Uses AT TIME ZONE to convert a timestamp to a specific time zone.
+
+How do you check if a column has a unique value in each row in SQL?
+
+sql
+Copy
+Edit
+SELECT column_name, COUNT(*)
+FROM data
+GROUP BY column_name
+HAVING COUNT(*) = 1;
+Groups rows by the column and filters to return only those with unique values.
+
+How do you calculate the rank of each row in a partition with ties using RANK()?
+
+sql
+Copy
+Edit
+SELECT id, value,
+       RANK() OVER (PARTITION BY category ORDER BY value DESC) AS rank
+FROM data;
+Uses RANK() to assign ranks within partitions, considering ties.
+
+How do you perform a SELF JOIN to find pairs of rows with similar values?
+
+sql
+Copy
+Edit
+SELECT a.id, a.value, b.id AS paired_id, b.value AS paired_value
+FROM data a
+JOIN data b ON a.value = b.value AND a.id != b.id;
+Uses a SELF JOIN to find rows with similar values, excluding pairs with the same id.
+
+How do you find rows with the most recent date in a table?
+
+sql
+Copy
+Edit
+SELECT *
+FROM data
+WHERE date_column = (SELECT MAX(date_column) FROM data);
+Uses a subquery to get the most recent date and filters the rows based on that date.
+
+How do you retrieve all rows where a column value is below a certain percentile?
+
+sql
+Copy
+Edit
+SELECT * FROM data
+WHERE value < (SELECT PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY value) FROM data);
+Uses PERCENTILE_CONT() to find rows below the 25th percentile.
+
+How do you calculate the ratio of a column value to the total sum of the column?
+
+sql
+Copy
+Edit
+SELECT id, value, value / SUM(value) OVER () AS value_ratio
+FROM data;
+Uses the SUM() window function to calculate the ratio of each value to the total sum.
+
+How do you use RANK() to assign rankings based on multiple columns?
+
+sql
+Copy
+Edit
+SELECT id, value,
+       RANK() OVER (PARTITION BY category ORDER BY value DESC, timestamp DESC) AS rank
+FROM data;
+Uses RANK() with multiple ORDER BY conditions to rank rows based on multiple columns.
+
+How do you create a recursive query to generate a series of dates?
+
+sql
+Copy
+Edit
+WITH RECURSIVE date_series AS (
+  SELECT '2025-01-01'::DATE AS date_value
+  UNION ALL
+  SELECT date_value + INTERVAL '1 day'
+  FROM date_series
+  WHERE date_value < '2025-01-10'
+)
+SELECT * FROM date_series;
+Uses a recursive CTE to generate a series of dates.
+
+How do you calculate the rolling average of a column with a window of 3 rows?
+
+sql
+Copy
+Edit
+SELECT id, value,
+       AVG(value) OVER (ORDER BY id ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS rolling_avg
+FROM data;
+Uses AVG() with a window function to calculate the rolling average for each row, considering the current and the previous two rows.
+
+How do you calculate the total number of rows and the number of distinct values in one query?
+
+sql
+Copy
+Edit
+SELECT COUNT(*) AS total_rows, COUNT(DISTINCT column_name) AS distinct_values
+FROM data;
+Uses COUNT() to calculate the total rows and distinct values in a column in one query.
+
+How do you exclude rows with specific conditions from a join in SQL?
+
+sql
+Copy
+Edit
+SELECT a.id, b.value
+FROM table1 a
+LEFT JOIN table2 b ON a.id = b.id
+WHERE b.value IS NOT NULL AND a.status != 'inactive';
+Filters rows in the JOIN where certain conditions (e.g., value IS NOT NULL and status != 'inactive') are met.
+
+How do you handle null values in a column when performing a COUNT()?
+
+sql
+Copy
+Edit
+SELECT COUNT(CASE WHEN column_name IS NOT NULL THEN 1 END) AS non_null_count
+FROM data;
+Uses CASE to exclude NULL values and count non-null rows.
+
+How do you use LEAD() to get the previous value in a column?
+
+sql
+Copy
+Edit
+SELECT id, value, LEAD(value) OVER (ORDER BY id) AS next_value
+FROM data;
+Uses LEAD() to get the value from the next row in the result set.
+
+How do you calculate the cumulative product of a column?
+
+sql
+Copy
+Edit
+SELECT id, value,
+       EXP(SUM(LN(value)) OVER (ORDER BY id)) AS cumulative_product
+FROM data;
+Uses the LN() and EXP() functions with a window function to calculate the cumulative product of a column.
+
+How do you concatenate multiple rows into a single string?
+
+sql
+Copy
+Edit
+SELECT STRING_AGG(value, ', ') AS concatenated_values
+FROM data;
+Uses STRING_AGG() to concatenate the values of a column into a single string.
+
+How do you calculate the difference between two dates in months, excluding weekends?
+
+sql
+Copy
+Edit
+SELECT id, 
+       (DATEDIFF(end_date, start_date) - (COUNT(*) * 2)) AS weekdays_difference
+FROM data
+WHERE EXTRACT(DOW FROM start_date) NOT IN (0, 6) AND EXTRACT(DOW FROM end_date) NOT IN (0, 6);
+Excludes weekends from the date difference calculation by filtering out 0 (Sunday) and 6 (Saturday).
+
+How do you get the first and last non-null value in a column using COALESCE()?
+
+sql
+Copy
+Edit
+SELECT COALESCE(MIN(value), 'No Data') AS first_non_null_value,
+       COALESCE(MAX(value), 'No Data') AS last_non_null_value
+FROM data;
+Uses COALESCE() to get the first and last non-null value in a column.
+
+How do you get the top N values from each group in SQL?
+
+sql
+Copy
+Edit
+WITH ranked_data AS (
+  SELECT id, value, category,
+         ROW_NUMBER() OVER (PARTITION BY category ORDER BY value DESC) AS rank
+  FROM data
+)
+SELECT id, value, category
+FROM ranked_data
+WHERE rank <= 3;
+Uses ROW_NUMBER() to assign ranks within each group and retrieves the top N values from each group.
+
+How do you filter rows based on the difference between two columns?
+
+sql
+Copy
+Edit
+SELECT *
+FROM data
+WHERE ABS(column1 - column2) > 100;
+Filters rows based on the absolute difference between two columns being greater than 100.
+
+How do you join multiple tables and avoid duplicating rows?
+
+sql
+Copy
+Edit
+SELECT DISTINCT a.id, b.value, c.description
+FROM table1 a
+JOIN table2 b ON a.id = b.id
+JOIN table3 c ON a.id = c.id;
+Uses DISTINCT to eliminate duplicates when joining multiple tables.
+
+How do you calculate the difference between each row and the previous row in SQL?
+
+sql
+Copy
+Edit
+SELECT id, value, 
+       value - LAG(value) OVER (ORDER BY id) AS difference
+FROM data;
+Uses LAG() to calculate the difference between the current row and the previous row.
+
+How do you perform a RIGHT JOIN in SQL?
+
+sql
+Copy
+Edit
+SELECT a.id, b.value
+FROM table1 a
+RIGHT JOIN table2 b ON a.id = b.id;
+Performs a RIGHT JOIN to return all rows from the right table, with NULL for rows from the left table that do not match.
+
+How do you get the number of rows per group?
+
+sql
+Copy
+Edit
+SELECT category, COUNT(*) AS num_rows
+FROM data
+GROUP BY category;
+Groups rows by a column (e.g., category) and counts the number of rows in each group.
+
+How do you update a column based on values from another table?
+
+sql
+Copy
+Edit
+UPDATE table1
+SET column1 = (SELECT column2 FROM table2 WHERE table1.id = table2.id)
+WHERE EXISTS (SELECT 1 FROM table2 WHERE table1.id = table2.id);
+Updates table1 based on values from table2 where there is a match on id.
+
+How do you create a union of two queries that return different numbers of columns?
+
+sql
+Copy
+Edit
+SELECT column1, column2 FROM table1
+UNION
+SELECT column1, NULL AS column2 FROM table2;
+Uses NULL as a placeholder to match the number of columns in both queries for the UNION.
+
+How do you create a column that shows the running total in SQL?
+
+sql
+Copy
+Edit
+SELECT id, value,
+       SUM(value) OVER (ORDER BY id) AS running_total
+FROM data;
+Uses the SUM() window function to calculate the running total of a column.
+
+How do you calculate the average of a column, excluding specific values?
+
+sql
+Copy
+Edit
+SELECT AVG(value) 
+FROM data
+WHERE value NOT IN (100, 200);
+Filters out specific values (e.g., 100 and 200) before calculating the average.
+
+How do you transpose rows into columns?
+
+sql
+Copy
+Edit
+SELECT id,
+       MAX(CASE WHEN category = 'A' THEN value END) AS A_value,
+       MAX(CASE WHEN category = 'B' THEN value END) AS B_value
+FROM data
+GROUP BY id;
+Uses CASE and MAX to pivot rows into columns based on a category.
+
+How do you calculate the cumulative count of rows in SQL?
+
+sql
+Copy
+Edit
+SELECT id, value,
+       COUNT(*) OVER (ORDER BY id) AS cumulative_count
+FROM data;
+Uses COUNT() with a window function to calculate the cumulative count.
+
+How do you get the first non-null value from a set of columns?
+
+sql
+Copy
+Edit
+SELECT COALESCE(column1, column2, column3) AS first_non_null_value
+FROM data;
+Uses COALESCE() to return the first non-null value from multiple columns.
+
+How do you find the most frequent value in a column?
+
+sql
+Copy
+Edit
+SELECT value, COUNT(*) AS frequency
+FROM data
+GROUP BY value
+ORDER BY frequency DESC
+LIMIT 1;
+Groups by value, counts occurrences, and orders to get the most frequent one.
+
+How do you handle NULLs while performing an aggregation?
+
+sql
+Copy
+Edit
+SELECT SUM(COALESCE(value, 0)) AS total_value
+FROM data;
+Uses COALESCE() to replace NULL with 0 before performing an aggregation like SUM().
+
+How do you identify the top N rows in each group?
+
+sql
+Copy
+Edit
+WITH ranked_data AS (
+  SELECT id, value, category,
+         ROW_NUMBER() OVER (PARTITION BY category ORDER BY value DESC) AS rank
+  FROM data
+)
+SELECT id, value, category
+FROM ranked_data
+WHERE rank <= 3;
+Uses ROW_NUMBER() to rank rows within each group and retrieves the top N rows.
+
+How do you count the number of rows returned by a subquery?
+
+sql
+Copy
+Edit
+SELECT COUNT(*) FROM (SELECT * FROM data WHERE value > 100) AS subquery;
+Counts the number of rows returned by a subquery.
+
+How do you join two tables on a condition involving multiple columns?
+
+sql
+Copy
+Edit
+SELECT a.id, b.value
+FROM table1 a
+JOIN table2 b ON a.id = b.id AND a.date = b.date;
+Joins two tables based on matching multiple columns.
+
+How do you find the nth highest value in a column using ROW_NUMBER()?
+
+sql
+Copy
+Edit
+SELECT value
+FROM (
+  SELECT value, ROW_NUMBER() OVER (ORDER BY value DESC) AS rank
+  FROM data
+) AS ranked_data
+WHERE rank = 3;
+Uses ROW_NUMBER() to rank values in descending order and filters for the nth highest value.
+
+How do you calculate the difference between the maximum and minimum values in a column?
+
+sql
+Copy
+Edit
+SELECT MAX(value) - MIN(value) AS value_range
+FROM data;
+Uses MAX() and MIN() to calculate the difference between the maximum and minimum values.
+
+How do you update a table based on a conditional calculation?
+
+sql
+Copy
+Edit
+UPDATE table1
+SET column1 = column1 * 1.1
+WHERE condition = 'some_condition';
+Updates column1 based on a conditional calculation (e.g., increasing by 10%).
+
+How do you count distinct values for multiple columns in a single query?
+
+sql
+Copy
+Edit
+SELECT COUNT(DISTINCT column1), COUNT(DISTINCT column2)
+FROM data;
+Uses COUNT(DISTINCT) to count distinct values in multiple columns.
+
+How do you handle duplicates while selecting data?
+
+sql
+Copy
+Edit
+SELECT DISTINCT column_name
+FROM data;
+Uses DISTINCT to eliminate duplicate rows for the specified column.
+
+How do you find the percentage of rows that meet a certain condition?
+
+sql
+Copy
+Edit
+SELECT (COUNT(*) * 100.0) / (SELECT COUNT(*) FROM data) AS percentage
+FROM data
+WHERE value > 100;
+Calculates the percentage of rows where a condition is met relative to the total row count.
+
+How do you find rows with the most recent date within each group?
+
+sql
+Copy
+Edit
+SELECT id, value, category
+FROM (
+  SELECT id, value, category, date_column,
+         ROW_NUMBER() OVER (PARTITION BY category ORDER BY date_column DESC) AS rank
+  FROM data
+) AS ranked_data
+WHERE rank = 1;
+Uses ROW_NUMBER() to assign ranks to rows within each group based on the most recent date.
+
+How do you update multiple columns at once in SQL?
+
+sql
+Copy
+Edit
+UPDATE table1
+SET column1 = 'new_value1', column2 = 'new_value2'
+WHERE condition = 'some_condition';
+Updates multiple columns in one query by specifying each column with its new value.
+
+How do you select all rows that do not have any matching rows in another table?
+
+sql
+Copy
+Edit
+SELECT *
+FROM table1
+WHERE id NOT IN (SELECT id FROM table2);
+Uses NOT IN to select rows from table1 where there are no matching rows in table2.
+
+How do you select rows based on a dynamic condition with CASE?
+
+sql
+Copy
+Edit
+SELECT id, value,
+       CASE 
+         WHEN value > 100 THEN 'High'
+         WHEN value <= 100 THEN 'Low'
+       END AS value_category
+FROM data;
+Uses CASE to dynamically categorize rows based on column values.
+
+How do you find the sum of values over a sliding window of N rows?
+
+sql
+Copy
+Edit
+SELECT id, value,
+       SUM(value) OVER (ORDER BY id ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS sliding_sum
+FROM data;
+Uses a window function to sum values over a sliding window of N rows.
+
+How do you handle NULLs while performing a JOIN in SQL?
+
+sql
+Copy
+Edit
+SELECT a.id, b.value
+FROM table1 a
+LEFT JOIN table2 b ON a.id = b.id
+WHERE b.value IS NOT NULL OR a.id IS NULL;
+Filters out NULL values from the JOIN while ensuring rows with no match are included in the result.
+
+How do you retrieve rows that are not duplicated based on a specific column?
+
+sql
+Copy
+Edit
+SELECT id, value
+FROM data
+GROUP BY id, value
+HAVING COUNT(*) = 1;
+Groups rows by columns and uses HAVING COUNT(*) = 1 to return non-duplicate rows.
+
+How do you calculate the variance of a column in SQL?
+
+sql
+Copy
+Edit
+SELECT VARIANCE(value) AS variance_value
+FROM data;
+Uses VARIANCE() to calculate the variance of a column.
+
+How do you calculate the correlation between two columns in SQL?
+
+sql
+Copy
+Edit
+SELECT CORR(column1, column2) AS correlation_value
+FROM data;
+Uses CORR() to calculate the correlation between two columns.
+
+How do you calculate the difference between two dates in days, excluding weekends and holidays?
+
+sql
+Copy
+Edit
+SELECT COUNT(*) AS business_days
+FROM generate_series(start_date, end_date, '1 day'::interval) AS date
+WHERE EXTRACT(DOW FROM date) NOT IN (0, 6) AND date NOT IN ('2025-12-25', '2025-01-01');
+Uses generate_series() to generate dates, excludes weekends, and filters out holidays.
+
+How do you create a column that shows the running total in SQL?
+
+sql
+Copy
+Edit
+SELECT id, value,
+       SUM(value) OVER (ORDER BY id) AS running_total
+FROM data;
+Uses the SUM() window function to calculate the running total of a column.
+
+How do you calculate the average of a column, excluding specific values?
+
+sql
+Copy
+Edit
+SELECT AVG(value) 
+FROM data
+WHERE value NOT IN (100, 200);
+Filters out specific values (e.g., 100 and 200) before calculating the average.
+
+How do you transpose rows into columns?
+
+sql
+Copy
+Edit
+SELECT id,
+       MAX(CASE WHEN category = 'A' THEN value END) AS A_value,
+       MAX(CASE WHEN category = 'B' THEN value END) AS B_value
+FROM data
+GROUP BY id;
+Uses CASE and MAX to pivot rows into columns based on a category.
+
+How do you calculate the cumulative count of rows in SQL?
+
+sql
+Copy
+Edit
+SELECT id, value,
+       COUNT(*) OVER (ORDER BY id) AS cumulative_count
+FROM data;
+Uses COUNT() with a window function to calculate the cumulative count.
+
+How do you get the first non-null value from a set of columns?
+
+sql
+Copy
+Edit
+SELECT COALESCE(column1, column2, column3) AS first_non_null_value
+FROM data;
+Uses COALESCE() to return the first non-null value from multiple columns.
+
+How do you find the most frequent value in a column?
+
+sql
+Copy
+Edit
+SELECT value, COUNT(*) AS frequency
+FROM data
+GROUP BY value
+ORDER BY frequency DESC
+LIMIT 1;
+Groups by value, counts occurrences, and orders to get the most frequent one.
+
+How do you handle NULLs while performing an aggregation?
+
+sql
+Copy
+Edit
+SELECT SUM(COALESCE(value, 0)) AS total_value
+FROM data;
+Uses COALESCE() to replace NULL with 0 before performing an aggregation like SUM().
+
+How do you identify the top N rows in each group?
+
+sql
+Copy
+Edit
+WITH ranked_data AS (
+  SELECT id, value, category,
+         ROW_NUMBER() OVER (PARTITION BY category ORDER BY value DESC) AS rank
+  FROM data
+)
+SELECT id, value, category
+FROM ranked_data
+WHERE rank <= 3;
+Uses ROW_NUMBER() to rank rows within each group and retrieves the top N rows.
+
+How do you count the number of rows returned by a subquery?
+
+sql
+Copy
+Edit
+SELECT COUNT(*) FROM (SELECT * FROM data WHERE value > 100) AS subquery;
+Counts the number of rows returned by a subquery.
+
+How do you join two tables on a condition involving multiple columns?
+
+sql
+Copy
+Edit
+SELECT a.id, b.value
+FROM table1 a
+JOIN table2 b ON a.id = b.id AND a.date = b.date;
+Joins two tables based on matching multiple columns.
+
+How do you find the nth highest value in a column using ROW_NUMBER()?
+
+sql
+Copy
+Edit
+SELECT value
+FROM (
+  SELECT value, ROW_NUMBER() OVER (ORDER BY value DESC) AS rank
+  FROM data
+) AS ranked_data
+WHERE rank = 3;
+Uses ROW_NUMBER() to rank values in descending order and filters for the nth highest value.
+
+How do you calculate the difference between the maximum and minimum values in a column?
+
+sql
+Copy
+Edit
+SELECT MAX(value) - MIN(value) AS value_range
+FROM data;
+Uses MAX() and MIN() to calculate the difference between the maximum and minimum values.
+
+How do you update a table based on a conditional calculation?
+
+sql
+Copy
+Edit
+UPDATE table1
+SET column1 = column1 * 1.1
+WHERE condition = 'some_condition';
+Updates column1 based on a conditional calculation (e.g., increasing by 10%).
+
+How do you count distinct values for multiple columns in a single query?
+
+sql
+Copy
+Edit
+SELECT COUNT(DISTINCT column1), COUNT(DISTINCT column2)
+FROM data;
+Uses COUNT(DISTINCT) to count distinct values in multiple columns.
+
+How do you handle duplicates while selecting data?
+
+sql
+Copy
+Edit
+SELECT DISTINCT column_name
+FROM data;
+Uses DISTINCT to eliminate duplicate rows for the specified column.
+
+How do you find the percentage of rows that meet a certain condition?
+
+sql
+Copy
+Edit
+SELECT (COUNT(*) * 100.0) / (SELECT COUNT(*) FROM data) AS percentage
+FROM data
+WHERE value > 100;
+Calculates the percentage of rows where a condition is met relative to the total row count.
+
+How do you find rows with the most recent date within each group?
+
+sql
+Copy
+Edit
+SELECT id, value, category
+FROM (
+  SELECT id, value, category, date_column,
+         ROW_NUMBER() OVER (PARTITION BY category ORDER BY date_column DESC) AS rank
+  FROM data
+) AS ranked_data
+WHERE rank = 1;
+Uses ROW_NUMBER() to assign ranks to rows within each group based on the most recent date.
+
+How do you update multiple columns at once in SQL?
+
+sql
+Copy
+Edit
+UPDATE table1
+SET column1 = 'new_value1', column2 = 'new_value2'
+WHERE condition = 'some_condition';
+Updates multiple columns in one query by specifying each column with its new value.
+
+How do you select all rows that do not have any matching rows in another table?
+
+sql
+Copy
+Edit
+SELECT *
+FROM table1
+WHERE id NOT IN (SELECT id FROM table2);
+Uses NOT IN to select rows from table1 where there are no matching rows in table2.
+
+How do you select rows based on a dynamic condition with CASE?
+
+sql
+Copy
+Edit
+SELECT id, value,
+       CASE 
+         WHEN value > 100 THEN 'High'
+         WHEN value <= 100 THEN 'Low'
+       END AS value_category
+FROM data;
+Uses CASE to dynamically categorize rows based on column values.
+
+How do you find the sum of values over a sliding window of N rows?
+
+sql
+Copy
+Edit
+SELECT id, value,
+       SUM(value) OVER (ORDER BY id ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS sliding_sum
+FROM data;
+Uses a window function to sum values over a sliding window of N rows.
+
+How do you handle NULLs while performing a JOIN in SQL?
+
+sql
+Copy
+Edit
+SELECT a.id, b.value
+FROM table1 a
+LEFT JOIN table2 b ON a.id = b.id
+WHERE b.value IS NOT NULL OR a.id IS NULL;
+Filters out NULL values from the JOIN while ensuring rows with no match are included in the result.
+
+How do you retrieve rows that are not duplicated based on a specific column?
+
+sql
+Copy
+Edit
+SELECT id, value
+FROM data
+GROUP BY id, value
+HAVING COUNT(*) = 1;
+Groups rows by columns and uses HAVING COUNT(*) = 1 to return non-duplicate rows.
+
+How do you calculate the variance of a column in SQL?
+
+sql
+Copy
+Edit
+SELECT VARIANCE(value) AS variance_value
+FROM data;
+Uses VARIANCE() to calculate the variance of a column.
+
+How do you calculate the correlation between two columns in SQL?
+
+sql
+Copy
+Edit
+SELECT CORR(column1, column2) AS correlation_value
+FROM data;
+Uses CORR() to calculate the correlation between two columns.
+
+How do you calculate the difference between two dates in days, excluding weekends and holidays?
+
+sql
+Copy
+Edit
+SELECT COUNT(*) AS business_days
+FROM generate_series(start_date, end_date, '1 day'::interval) AS date
+WHERE EXTRACT(DOW FROM date) NOT IN (0, 6) AND date NOT IN ('2025-12-25', '2025-01-01');
+Uses generate_series() to generate dates, excludes weekends, and filters out holidays.
+
+These questions focus on advanced SQL topics such as window functions, recursive queries, JOIN operations, and statistical functions. Let me know if you'd like more questions or deeper explanations!
+
+
+
+
+
+
+
+You said:
+MORE
+
+
+ChatGPT said:
+Here are even more advanced SQL programming questions with concise answers:
+
+More Advanced SQL Programming Questions
+How do you find the duplicate rows in a table?
+
+sql
+Copy
+Edit
+SELECT column1, column2, COUNT(*)
+FROM data
+GROUP BY column1, column2
+HAVING COUNT(*) > 1;
+Groups by columns and finds duplicates by filtering groups with counts greater than 1.
+
+How do you convert a string to a date in SQL?
+
+sql
+Copy
+Edit
+SELECT TO_DATE('2025-03-27', 'YYYY-MM-DD') AS converted_date;
+Uses TO_DATE() to convert a string into a date in the specified format.
+
+How do you get the first and last row in a table based on a column's order?
+
+sql
+Copy
+Edit
+SELECT *
+FROM data
+WHERE id = (SELECT MIN(id) FROM data) OR id = (SELECT MAX(id) FROM data);
+Retrieves the first and last row by finding the minimum and maximum values in the id column.
+
+How do you calculate the median of a column in SQL?
+
+sql
+Copy
+Edit
+SELECT value
+FROM (
+  SELECT value, ROW_NUMBER() OVER (ORDER BY value) AS row_num, COUNT(*) OVER () AS total_rows
+  FROM data
+) AS ranked_data
+WHERE row_num = (total_rows + 1) / 2;
+Uses ROW_NUMBER() to rank rows and calculates the median based on the middle value.
+
+How do you get the distinct values from a table without using DISTINCT?
+
+sql
+Copy
+Edit
+SELECT column1
+FROM data
+GROUP BY column1;
+Uses GROUP BY to return distinct values without DISTINCT.
+
+How do you find the second-highest value in a column?
+
+sql
+Copy
+Edit
+SELECT MAX(value) AS second_highest
+FROM data
+WHERE value < (SELECT MAX(value) FROM data);
+Finds the second-highest value by excluding the maximum value.
+
+How do you split a column value into multiple rows based on a delimiter?
+
+sql
+Copy
+Edit
+SELECT unnest(string_to_array(column_name, ',')) AS split_values
+FROM data;
+Uses string_to_array() to split a column by a delimiter and unnest() to turn it into multiple rows.
+
+How do you calculate the cumulative sum for a column within each group?
+
+sql
+Copy
+Edit
+SELECT id, value, category,
+       SUM(value) OVER (PARTITION BY category ORDER BY id) AS cumulative_sum
+FROM data;
+Uses SUM() with a PARTITION BY clause to calculate the cumulative sum for each group.
+
+How do you remove leading and trailing spaces from a column in SQL?
+
+sql
+Copy
+Edit
+SELECT TRIM(column_name) AS trimmed_value
+FROM data;
+Uses TRIM() to remove leading and trailing spaces from a column value.
+
+How do you calculate the difference between two dates in years, months, and days?
+
+sql
+Copy
+Edit
+SELECT AGE(end_date, start_date) AS date_difference
+FROM data;
+Uses the AGE() function to calculate the difference between two dates in terms of years, months, and days.
+
+How do you concatenate multiple columns into a single column?
+
+sql
+Copy
+Edit
+SELECT column1 || ' ' || column2 AS full_name
+FROM data;
+Uses the concatenation operator (||) to merge multiple columns into one.
+
+How do you check if a column contains a specific substring?
+
+sql
+Copy
+Edit
+SELECT *
+FROM data
+WHERE column_name LIKE '%substring%';
+Uses LIKE with % to search for rows containing a specific substring.
+
+How do you find the total number of rows for each unique combination of multiple columns?
+
+sql
+Copy
+Edit
+SELECT column1, column2, COUNT(*)
+FROM data
+GROUP BY column1, column2;
+Groups rows by multiple columns and counts the number of rows in each group.
+
+How do you find the number of rows with missing values in a column?
+
+sql
+Copy
+Edit
+SELECT COUNT(*)
+FROM data
+WHERE column_name IS NULL;
+Counts the rows where a specific column contains NULL values.
+
+How do you get the first non-null value from multiple columns in SQL?
+
+sql
+Copy
+Edit
+SELECT COALESCE(column1, column2, column3) AS first_non_null_value
+FROM data;
+Uses COALESCE() to return the first non-null value among the specified columns.
+
+How do you calculate the moving average of a column using a window?
+
+sql
+Copy
+Edit
+SELECT id, value,
+       AVG(value) OVER (ORDER BY id ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS moving_avg
+FROM data;
+Uses AVG() with a window function to calculate the moving average.
+
+How do you retrieve rows that have at least one NULL value in any column?
+
+sql
+Copy
+Edit
+SELECT *
+FROM data
+WHERE column1 IS NULL OR column2 IS NULL OR column3 IS NULL;
+Filters rows where any of the specified columns contain NULL values.
+
+How do you use CASE to categorize rows based on different conditions?
+
+sql
+Copy
+Edit
+SELECT id, value,
+       CASE 
+         WHEN value > 100 THEN 'High'
+         WHEN value BETWEEN 50 AND 100 THEN 'Medium'
+         ELSE 'Low'
+       END AS value_category
+FROM data;
+Uses CASE to categorize rows into 'High', 'Medium', or 'Low' based on the value.
+
+How do you identify rows with unique combinations of multiple columns?
+
+sql
+Copy
+Edit
+SELECT column1, column2
+FROM data
+GROUP BY column1, column2
+HAVING COUNT(*) = 1;
+Uses GROUP BY and HAVING COUNT(*) = 1 to identify unique combinations of multiple columns.
+
+How do you update rows based on another table's data in SQL?
+
+sql
+Copy
+Edit
+UPDATE table1
+SET column1 = (SELECT column2 FROM table2 WHERE table1.id = table2.id)
+WHERE EXISTS (SELECT 1 FROM table2 WHERE table1.id = table2.id);
+Updates rows in table1 based on matching values from table2.
+
+How do you find rows that exist in one table but not in another?
+
+sql
+Copy
+Edit
+SELECT *
+FROM table1
+WHERE id NOT IN (SELECT id FROM table2);
+Finds rows in table1 where the id does not exist in table2.
+
+How do you calculate the percentage of total in a column?
+
+sql
+Copy
+Edit
+SELECT id, value, 
+       value / (SELECT SUM(value) FROM data) * 100 AS percentage_of_total
+FROM data;
+Divides each value by the total sum of the column and multiplies by 100 to get the percentage.
+
+How do you find the first value in a column for each group?
+
+sql
+Copy
+Edit
+SELECT category, FIRST_VALUE(value) OVER (PARTITION BY category ORDER BY id) AS first_value
+FROM data;
+Uses FIRST_VALUE() to retrieve the first value in each group, based on a specific order.
+
+How do you generate a series of dates in SQL?
+
+sql
+Copy
+Edit
+SELECT generate_series('2025-01-01'::date, '2025-01-10'::date, '1 day'::interval) AS date_series;
+Uses generate_series() to generate a series of dates from a start to an end date with a specified interval.
+
+How do you find the common values between two tables?
+
+sql
+Copy
+Edit
+SELECT column1
+FROM table1
+INTERSECT
+SELECT column1
+FROM table2;
+Uses INTERSECT to find common values between two tables based on a specified column.
+
+How do you get the last non-null value in a column?
+
+sql
+Copy
+Edit
+SELECT value
+FROM (
+  SELECT value, ROW_NUMBER() OVER (ORDER BY id DESC) AS row_num
+  FROM data
+  WHERE value IS NOT NULL
+) AS ranked_data
+WHERE row_num = 1;
+Uses ROW_NUMBER() to rank rows in descending order and retrieves the last non-null value.
+
+More Advanced SQL Programming Questions
+How do you find the top N values per group in SQL?
+
+sql
+Copy
+Edit
+SELECT id, value, category
+FROM (
+  SELECT id, value, category, 
+         ROW_NUMBER() OVER (PARTITION BY category ORDER BY value DESC) AS rank
+  FROM data
+) AS ranked_data
+WHERE rank <= 3;
+Uses ROW_NUMBER() with PARTITION BY to find the top N rows per group.
+
+How do you find the difference between two dates in years?
+
+sql
+Copy
+Edit
+SELECT EXTRACT(YEAR FROM AGE(end_date, start_date)) AS years_diff
+FROM data;
+Uses EXTRACT() and AGE() to calculate the difference between two dates in years.
+
+How do you calculate the moving average of the last N rows in SQL?
+
+sql
+Copy
+Edit
+SELECT id, value, 
+       AVG(value) OVER (ORDER BY id ROWS BETWEEN 4 PRECEDING AND CURRENT ROW) AS moving_avg
+FROM data;
+Uses AVG() with ROWS BETWEEN to calculate the moving average for the last N rows.
+
+How do you find the first and last value in each group?
+
+sql
+Copy
+Edit
+SELECT category, 
+       FIRST_VALUE(value) OVER (PARTITION BY category ORDER BY id) AS first_value,
+       LAST_VALUE(value) OVER (PARTITION BY category ORDER BY id ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS last_value
+FROM data;
+Uses FIRST_VALUE() and LAST_VALUE() to retrieve the first and last values per group.
+
+How do you return rows where a column value is between two values?
+
+sql
+Copy
+Edit
+SELECT *
+FROM data
+WHERE value BETWEEN 50 AND 100;
+Uses BETWEEN to filter rows where the column value falls within a specific range.
+
+How do you pivot rows into columns based on conditions?
+
+sql
+Copy
+Edit
+SELECT id,
+       MAX(CASE WHEN category = 'A' THEN value END) AS A_value,
+       MAX(CASE WHEN category = 'B' THEN value END) AS B_value
+FROM data
+GROUP BY id;
+Uses CASE with MAX() to pivot rows into columns based on category.
+
+How do you find the average of a column grouped by multiple columns?
+
+sql
+Copy
+Edit
+SELECT column1, column2, AVG(value) AS avg_value
+FROM data
+GROUP BY column1, column2;
+Groups data by multiple columns and calculates the average for each group.
+
+How do you find the rows with the latest date for each group?
+
+sql
+Copy
+Edit
+SELECT id, value, category
+FROM (
+  SELECT id, value, category, date_column,
+         ROW_NUMBER() OVER (PARTITION BY category ORDER BY date_column DESC) AS rank
+  FROM data
+) AS ranked_data
+WHERE rank = 1;
+Uses ROW_NUMBER() to retrieve rows with the latest date for each group.
+
+How do you calculate the difference between each row and the previous row in SQL?
+
+sql
+Copy
+Edit
+SELECT id, value, 
+       value - LAG(value) OVER (ORDER BY id) AS difference
+FROM data;
+Uses LAG() to calculate the difference between the current and previous row.
+
+How do you find rows with NULL values in multiple columns?
+
+sql
+Copy
+Edit
+SELECT *
+FROM data
+WHERE column1 IS NULL OR column2 IS NULL;
+Filters rows where any of the specified columns contain NULL values.
+
+How do you perform a self-join in SQL?
+
+sql
+Copy
+Edit
+SELECT a.id, a.value, b.value
+FROM data a
+JOIN data b ON a.id = b.id AND a.date_column < b.date_column;
+Joins the table with itself (self-join) based on a condition.
+
+How do you select rows that match a pattern using regular expressions?
+
+sql
+Copy
+Edit
+SELECT *
+FROM data
+WHERE column_name ~ '^[A-Za-z]+$';
+Uses regular expressions (~) to match values that consist only of alphabetic characters.
+
+How do you filter rows with a specific date range in SQL?
+
+sql
+Copy
+Edit
+SELECT *
+FROM data
+WHERE date_column BETWEEN '2025-01-01' AND '2025-12-31';
+Uses BETWEEN to filter rows based on a date range.
+
+How do you generate a series of sequential numbers in SQL?
+
+sql
+Copy
+Edit
+SELECT generate_series(1, 10) AS seq_number;
+Uses generate_series() to generate a sequence of numbers.
+
+How do you filter out rows where a column contains a specific substring?
+
+sql
+Copy
+Edit
+SELECT *
+FROM data
+WHERE column_name NOT LIKE '%substring%';
+Uses NOT LIKE to filter out rows that contain a specific substring.
+
+How do you remove duplicate rows in SQL?
+
+sql
+Copy
+Edit
+SELECT DISTINCT column1, column2
+FROM data;
+Uses DISTINCT to eliminate duplicate rows based on the specified columns.
+
+How do you calculate the rank of each row within a group?
+
+sql
+Copy
+Edit
+SELECT id, value, category,
+       RANK() OVER (PARTITION BY category ORDER BY value DESC) AS rank
+FROM data;
+Uses RANK() with PARTITION BY to assign a rank to each row within its group.
+
+How do you update rows using a JOIN between two tables?
+
+sql
+Copy
+Edit
+UPDATE table1
+SET column1 = table2.column2
+FROM table2
+WHERE table1.id = table2.id;
+Joins two tables to update rows in one table based on values from another table.
+
+How do you find the difference between the highest and lowest values for each group?
+
+sql
+Copy
+Edit
+SELECT category, MAX(value) - MIN(value) AS value_diff
+FROM data
+GROUP BY category;
+Calculates the difference between the maximum and minimum values within each group.
+
+How do you find the total count of unique values in a column?
+
+sql
+Copy
+Edit
+SELECT COUNT(DISTINCT column_name)
+FROM data;
+Uses COUNT(DISTINCT) to find the count of unique values in a column.
+
+How do you create a derived table in SQL?
+
+sql
+Copy
+Edit
+SELECT id, value
+FROM (SELECT id, value FROM data WHERE category = 'A') AS derived_table;
+Uses a subquery to create a derived table and selects from it.
+
+How do you remove rows with a certain pattern in a column?
+
+sql
+Copy
+Edit
+DELETE FROM data
+WHERE column_name LIKE '%pattern%';
+Uses DELETE with LIKE to remove rows containing a specific pattern.
+
+How do you calculate the difference between two columns in the same row?
+
+sql
+Copy
+Edit
+SELECT column1 - column2 AS difference
+FROM data;
+Subtracts the values of two columns in the same row to get the difference.
+
+How do you get the percentage of each value in a column relative to the total?
+
+sql
+Copy
+Edit
+SELECT column1, 
+       (column1 / (SELECT SUM(column1) FROM data)) * 100 AS percentage
+FROM data;
+Divides each value by the total sum of the column and multiplies by 100 to get the percentage.
+
+How do you select data from a table and exclude specific rows using a condition?
+
+sql
+Copy
+Edit
+SELECT *
+FROM data
+WHERE column1 != 'exclude_value';
+Uses WHERE with the != operator to exclude rows where the column matches a specific value.
+
+How do you retrieve rows based on a specific range of values in SQL?
+
+sql
+Copy
+Edit
+SELECT *
+FROM data
+WHERE column_name > 50 AND column_name < 100;
+Filters rows where a column value falls within a specified range.
+
+How do you select data from multiple tables and combine them into a single result set?
+
+sql
+Copy
+Edit
+SELECT a.column1, b.column2
+FROM table1 a
+JOIN table2 b ON a.id = b.id;
+Uses JOIN to combine data from multiple tables into a single result set.
+
+More Advanced SQL Programming Questions
+How do you find rows with the highest and lowest values in each group?
+
+sql
+Copy
+Edit
+SELECT category, value
+FROM (
+  SELECT category, value,
+         RANK() OVER (PARTITION BY category ORDER BY value DESC) AS rank_high,
+         RANK() OVER (PARTITION BY category ORDER BY value ASC) AS rank_low
+  FROM data
+) AS ranked_data
+WHERE rank_high = 1 OR rank_low = 1;
+Uses RANK() to get the highest and lowest values for each group by partitioning.
+
+How do you calculate a running total in SQL?
+
+sql
+Copy
+Edit
+SELECT id, value,
+       SUM(value) OVER (ORDER BY id) AS running_total
+FROM data;
+Uses SUM() with OVER to calculate a running total, ordered by id.
+
+How do you exclude rows with NULL values in certain columns?
+
+sql
+Copy
+Edit
+SELECT *
+FROM data
+WHERE column1 IS NOT NULL AND column2 IS NOT NULL;
+Filters out rows where any specified column contains NULL values.
+
+How do you find the first non-null value in multiple columns?
+
+sql
+Copy
+Edit
+SELECT COALESCE(column1, column2, column3) AS first_non_null_value
+FROM data;
+Uses COALESCE() to return the first non-null value from a list of columns.
+
+How do you calculate the moving average over a fixed window size?
+
+sql
+Copy
+Edit
+SELECT id, value, 
+       AVG(value) OVER (ORDER BY id ROWS BETWEEN 4 PRECEDING AND CURRENT ROW) AS moving_avg
+FROM data;
+Calculates the moving average using ROWS BETWEEN for a fixed window size.
+
+How do you add a computed column in SQL?
+
+sql
+Copy
+Edit
+ALTER TABLE data
+ADD total_value AS (column1 + column2);
+Adds a computed column that is the sum of column1 and column2.
+
+How do you filter rows with a date column falling within the current week?
+
+sql
+Copy
+Edit
+SELECT *
+FROM data
+WHERE date_column >= CURRENT_DATE - INTERVAL '7 days';
+Filters rows where date_column falls within the past 7 days (the current week).
+
+How do you find the difference between two columns in each row and display it?
+
+sql
+Copy
+Edit
+SELECT column1, column2, column1 - column2 AS difference
+FROM data;
+Subtracts one column from another to get the difference in each row.
+
+How do you find all rows where the value of one column is greater than the average value of another column?
+
+sql
+Copy
+Edit
+SELECT *
+FROM data
+WHERE column1 > (SELECT AVG(column2) FROM data);
+Filters rows where column1 is greater than the average value of column2.
+
+How do you calculate the cumulative percentage of a column's values in SQL?
+
+sql
+Copy
+Edit
+SELECT id, value, 
+       (SUM(value) OVER (ORDER BY id) / (SELECT SUM(value) FROM data)) * 100 AS cumulative_percentage
+FROM data;
+Calculates the cumulative sum and divides by the total sum to get the percentage.
+
+How do you find the number of days between two dates in SQL?
+
+sql
+Copy
+Edit
+SELECT DATEDIFF(end_date, start_date) AS days_diff
+FROM data;
+Uses DATEDIFF() to calculate the number of days between two dates.
+
+How do you extract the month and year from a date column in SQL?
+
+sql
+Copy
+Edit
+SELECT EXTRACT(MONTH FROM date_column) AS month, EXTRACT(YEAR FROM date_column) AS year
+FROM data;
+Uses EXTRACT() to extract the month and year parts from a date column.
+
+How do you concatenate multiple columns into a single string with a separator in SQL?
+
+sql
+Copy
+Edit
+SELECT CONCAT_WS('-', column1, column2, column3) AS combined_string
+FROM data;
+Uses CONCAT_WS() to concatenate multiple columns with a separator.
+
+How do you find the percentage of NULL values in a column?
+
+sql
+Copy
+Edit
+SELECT (COUNT(*) FILTER (WHERE column1 IS NULL) * 100.0) / COUNT(*) AS null_percentage
+FROM data;
+Calculates the percentage of NULL values in a column using FILTER.
+
+How do you generate a sequence of numbers with gaps in SQL?
+
+sql
+Copy
+Edit
+SELECT generate_series(1, 100, 3) AS sequence;
+Uses generate_series() to create a sequence with a specified step (gap).
+
+How do you count the number of rows with different statuses?
+
+sql
+Copy
+Edit
+SELECT status, COUNT(*)
+FROM data
+GROUP BY status;
+Groups by status and counts the number of rows in each group.
+
+How do you use CASE to calculate the number of orders by each customer?
+
+sql
+Copy
+Edit
+SELECT customer_id,
+       COUNT(CASE WHEN order_status = 'Completed' THEN 1 END) AS completed_orders,
+       COUNT(CASE WHEN order_status = 'Pending' THEN 1 END) AS pending_orders
+FROM orders
+GROUP BY customer_id;
+Uses CASE within COUNT() to calculate the number of completed and pending orders per customer.
+
+How do you use RANK() to find the nth highest value in a column?
+
+sql
+Copy
+Edit
+SELECT id, value
+FROM (
+  SELECT id, value, RANK() OVER (ORDER BY value DESC) AS rank
+  FROM data
+) AS ranked_data
+WHERE rank = 3;
+Uses RANK() to find the nth highest value in a column by filtering the rank.
+
+How do you delete rows with duplicate values in SQL?
+
+sql
+Copy
+Edit
+DELETE FROM data
+WHERE id NOT IN (
+  SELECT MIN(id)
+  FROM data
+  GROUP BY column1, column2
+);
+Deletes duplicate rows by keeping the first occurrence based on a grouping.
+
+How do you find the total number of rows excluding duplicates in SQL?
+
+sql
+Copy
+Edit
+SELECT COUNT(DISTINCT column_name) AS unique_count
+FROM data;
+Uses COUNT(DISTINCT) to find the total number of distinct (unique) values in a column.
+
+How do you perform a full outer join between two tables?
+
+sql
+Copy
+Edit
+SELECT a.id, a.value, b.value
+FROM table1 a
+FULL OUTER JOIN table2 b ON a.id = b.id;
+Performs a full outer join between two tables, returning all rows from both tables.
+
+How do you get the median value of a column in SQL?
+
+sql
+Copy
+Edit
+SELECT value
+FROM (
+  SELECT value, ROW_NUMBER() OVER (ORDER BY value) AS row_num, COUNT(*) OVER () AS total_rows
+  FROM data
+) AS ranked_data
+WHERE row_num = (total_rows + 1) / 2;
+Calculates the median by using ROW_NUMBER() to find the middle value in the ordered set.
+
+How do you perform an INNER JOIN using multiple conditions in SQL?
+
+sql
+Copy
+Edit
+SELECT a.id, a.value, b.value
+FROM table1 a
+INNER JOIN table2 b ON a.id = b.id AND a.date_column = b.date_column;
+Performs an INNER JOIN with multiple conditions specified in the ON clause.
+
+How do you update a table by joining another table in SQL?
+
+sql
+Copy
+Edit
+UPDATE table1
+SET column1 = table2.column2
+FROM table2
+WHERE table1.id = table2.id;
+Updates table1 by joining table2 based on a condition.
+
+How do you create a new table from an existing one in SQL?
+
+sql
+Copy
+Edit
+CREATE TABLE new_table AS
+SELECT * FROM old_table;
+Creates a new table by copying the structure and data from an existing table.
+
