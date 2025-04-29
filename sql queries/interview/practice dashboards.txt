@@ -1,0 +1,10 @@
+practice dashboards:
+1. https://tcsglobal.udemy.com/course/business-data-analysis-using-microsoft-power-bi/learn/lecture/13469434#reviews
+
+Important courses
+1. https://tcsglobal.udemy.com/course/machine-learning-and-artificial-intelligence-in-power-bi/
+2. https://tcsglobal.udemy.com/course/70-778-analyzing-and-visualizing-data-with-power-bi/
+3. https://tcsglobal.udemy.com/course/data-analysts-toolbox-excel-python-power-bi/
+4. https://tcsglobal.udemy.com/course/microsoft-power-bi-certification-da-100-exam-prep/
+5. https://tcsglobal.udemy.com/course/advanced-dax-for-power-bi/
+6. sql https://tcsglobal.udemy.com/course/sql-mysql-for-data-analytics-and-business-intelligence/

@@ -1,0 +1,22 @@
+Interview challenges:
+Question: What are the challenges you faced while creating a dashboard? Can you give an example using the HASONEVALUE function?
+
+Answer:
+
+"One of the challenges I faced while creating a dashboard was ensuring that certain calculations or visualizations were properly adjusted based on the user’s selection. Specifically, there was a scenario where we had a report that analyzed sales data across different regions. The challenge was to display a summary metric like the total sales amount only when a user selected exactly one region from a slicer. If the user selected multiple regions or none at all, we didn’t want to show the summary metric because it would be misleading.
+
+To handle this, I used the HASONEVALUE function in DAX. The HASONEVALUE function allowed me to check if only one region was selected in the slicer, and based on that, I could dynamically adjust the calculation or show a default message. For example, the DAX formula I wrote for this situation was:
+
+DAX
+Copy
+Sales Summary = 
+IF(
+    HASONEVALUE('Regions'[Region]),
+    SUM('Sales'[SalesAmount]), 
+    "Please select one region"
+)
+In this case, the formula would only show the sum of SalesAmount when one region was selected. If the user selected multiple regions or none, the dashboard would prompt them to select only one region.
+
+This approach helped ensure that the dashboard was user-friendly and that the metrics were always accurate and contextually relevant. It also improved the overall user experience because users were guided to make the correct selection for the specific analysis they wanted."
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -26,6 +26,7 @@ VALUES ('Dhillu', 'gundu', 'dhillu@gmail.com', 8),
 	   ('Nihu', 'gundu', 'nihu@gmail.com', 3),
 	   ('Nidhi', 'bitla', 'nidhi@gmail.com', 35);
 
+
 -- View the table
 SELECT * FROM customers;
 
