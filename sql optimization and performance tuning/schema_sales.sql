@@ -1,0 +1,6 @@
+-- SCHEMA: sales
+
+DROP SCHEMA IF EXISTS sales ;
+
+CREATE SCHEMA IF NOT EXISTS sales
+    AUTHORIZATION postgres;
