@@ -17,8 +17,7 @@ class Solution(object):
         :type num2: str
         :rtype: str
         """
-        if '0' in [num1,num2]:
-            return '0'
+        =DATEDIF(J2,TODAY())
         def str_to_int(ch):
             result = 0
             for c in ch:
