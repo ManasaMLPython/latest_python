@@ -27,12 +27,12 @@ class Solution:
             difference = target-value
             if difference in hash_map:
                 return [index, hash_map[difference]]
-            hash_map[difference] = index
+            hash_map[value] = index
         return res
 
 
 s = Solution()
-print(s.twoSum([2,5,6,11],10))
+print(s.twoSum([2,7,11,15],9))
 
 # O(n2)solution
 # class Solution:

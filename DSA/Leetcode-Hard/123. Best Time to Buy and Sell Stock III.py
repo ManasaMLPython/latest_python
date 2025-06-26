@@ -28,7 +28,17 @@ from typing import List
 
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        
+        min_buy = prices[0]
+        max1=0
+        max2=0
+        for price in prices:
+            if price<=min_buy:
+                min_buy=price
+            elif (price-min_buy) > max1:
+                max2 = max(max1,max2)
+                max1 = price-min_buy
+                print(f'price={price}, max1={max1}, max2={max2}, min_buy={min_buy}')
 
+        return max1+max2
 s = Solution()
-print(s.maxProfit(prices = [6,1,3,2,4,7]))
+print(s.maxProfit(prices = [3,3,5,0,0,3,1,4]))
