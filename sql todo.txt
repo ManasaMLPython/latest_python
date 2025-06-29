@@ -1,0 +1,43 @@
+Find the 2nd latest purchase per user.”
+• “Top 3 products by revenue per region — in one query.”
+• “Explain why NOT IN breaks when NULLs are involved.”
+• “How would you optimize a slow query hitting 100M+ rows?”
+• “How would you design a pipeline to ingest and transform 50M events per day?”
+• “What do you do if a batch job partially fails?”
+• “How do you handle schema drift in a streaming system?”• “How do you ensure data quality in production?”
+• “Explain pipeline latency to a non-technical business user.”
+• “Tell me about a time you fixed something no one else noticed.”
+1. What’s the difference between RANK(), DENSE_RANK(), and ROW_NUMBER() in SQL? When would you use each?
+
+2. How do you remove duplicate rows in SQL while keeping the most recent record based on a date column?
+
+3. How would you handle inconsistent date formats in a dataset in Excel or Power BI?
+
+4. Explain the use of CALCULATE() in Power BI. How does it change the context of a measure?
+
+5. How do you ensure data quality before delivering a report?
+
+6. What is the difference between inner query and correlated subquery in SQL? Give an example.
+
+7. If a column has 90% NULL values, what would you do with it?
+
+8. How would you handle a stakeholder requesting unrealistic changes just before a deadline?
+
+9. What are some ways to reduce the size of a Power BI .pbix file?
+
+10. How do you manage and document logic behind calculated fields and KPIs in your reports?
+1️ You have an event log with multiple rows per user.
+Write a query to get the first and last event timestamp for each user, using window functions.
+2️ How would you identify gaps in sequential IDs in a table — say, missing invoice numbers?
+3️ Given a sales table, how would you calculate a 7-day rolling average of revenue per region?
+4️ You have a products table and a sales table.
+Write a query to find products that haven’t been sold in the last 90 days.
+5️ How would you compare the schema of two tables (say dev vs prod) using SQL?
+6️ There are duplicate rows in a table — with no primary key.
+How would you deduplicate and keep the most recent record?
+7️ You’ve joined three large tables. The query is running slowly.
+How do you diagnose and fix it without looking at the code first?
+8️ How would you pivot monthly revenue data by region (columns as months)?
+9️ Write a query to find users who made exactly three purchases in the last 30 days.
+10 You notice a LEFT JOIN returning fewer rows than expected.
+Walk me through all the reasons why that might happen — and how you’d troubleshoot.

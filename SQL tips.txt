@@ -1,0 +1,9 @@
+📌Use NOT EXISTS instead of NOT IN when identifying customers who haven’t placed any orders in the last 90 days.
+→The reason is that NOT IN does not handle NULL values safely — if the subquery returns even a single NULL, the entire condition evaluates as unknown, and                                                                      	no rows may be returned.
+→PostgreSQL operates with three-valued logic: TRUE, FALSE, and NULL.
+→In contrast, NOT EXISTS is null-safe — it simply checks for the absence of matching rows, regardless of nulls in the subquery. 
+📌Two new columns in the output that aren’t in the input?
+→ That means you need a CASE statement. Learn to derive not just retrieve.
+
+📌Conditional logic?
+→ Think: If-Then-Else = CASE WHEN ... THEN ... ELSE ... END
