@@ -1,0 +1,6 @@
+OrderID,CustomerName,OrderDate,Amount
+1,Alice,2024-01-15,250
+2,Bob,2024-02-20,300
+3,Carol,2024-03-05,180
+4,David,2024-08-04,220
+5,Eva,2024-08-01,150
